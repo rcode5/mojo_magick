@@ -52,7 +52,7 @@ After this transformation, your image will be 100x100.  But it does not distort 
     end
 
 ## More Code on setting memory limits for imagemagick
-(Be sure you’re upgraded to the current release of ImageMagick.)
+(Be sure you're upgraded to the current release of ImageMagick.)
 
 set limits on disk, area, map and ram usage
 obtain/print a hash of default limits:
