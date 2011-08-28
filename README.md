@@ -70,7 +70,7 @@ current\_limits shows same values:
     MojoMagick::set_limits(:area => '32mb', :disk => '0', :memory => '64mb', :map => '32mb')
     puts MojoMagick::get_current_limits.inspect
 
-As of ImageMagick 6.6, you also have the ability to set {{:threads}} and {{:time}}.  Read [ImageMagick docs on limits](http://www.imagemagick.org/script/command-line-options.php#limit) for more info.
+As of ImageMagick 6.6, you also have the ability to set `:threads` and `:time`.  Read [ImageMagick docs on limits](http://www.imagemagick.org/script/command-line-options.php#limit) for more info.
 
 ## For more complex operations (thanks to Elliot Nelson for adding this code to the system)
 
@@ -115,8 +115,9 @@ complex commands.
 
 Availablility
 =============
-SVN Repo access from here: http://trac.misuse.org/science/wiki/MojoMagick
-Contact author or discuss MojoMagick here: http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/
+
+ * [SVN Repo access](http://trac.misuse.org/science/wiki/MojoMagick)
+ * Concact the author or discuss MojoMagick : [misuse.org](http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/)
 
 
 #### Updates by Jon Rogers Aug 2011 (http://github.com/bunnymatic)
@@ -124,7 +125,7 @@ Contact author or discuss MojoMagick here: http://www.misuse.org/science/2008/01
 * updated tests for ImageMagick 6.6
 * added ability to do fill + crop resizing
 * bumped version to 0.3.0
-* new github repo https://github.com/bunnymatic/mojo_magick
+* [new github repo](https://github.com/bunnymatic/mojo_magick)
 
 
 References
