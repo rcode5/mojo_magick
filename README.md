@@ -13,6 +13,8 @@ because-it's-too-simple-to-break image tool.
 Examples
 ========
 
+## Image Resizing
+
 ### Obtain the size of an image (assuming image is "120wx222h")
 
     dimensions = MojoMagick::get_image_size(test_image)
@@ -25,17 +27,19 @@ In this example, we overwrite our image, but if you pass in a different file for
     MojoMagick::resize('/img/test.jpg', '/img/test.jpg', {:width=>100, :height=>200})
 
 ### Resize an image so that it fills a 100 x 100 bounding box
+
 After this transformation, your image's short side will be 100px. This will preserve the aspect ratio.
 
     MojoMagick::resize('/img/infile.jpg', '/img/outfile.jpg', {:width=>100, :height=>100, :fill => true})
 
-### Resize an image so that it fills (and is cropped) to fill a 
-100 x 100 bounding box
+### Resize an image so that it fills and is cropped to a 100 x 100 bounding box
+
 After this transformation, your image will be 100x100.  But it does not distort the images.  It crops out of the Center.
 
     MojoMagick::resize('/img/infile.jpg', '/img/outfile.jpg', {:width=>100, :height=>100, :fill => true, :crop => true})
 
 ### Code sample of how to shrink all jpg's in a folder
+
     require 'mojo_magick'
     
     image_folder = '/tmp/img'
@@ -51,8 +55,8 @@ After this transformation, your image will be 100x100.  But it does not distort 
       end
     end
 
-## More Code on setting memory limits for imagemagick
-(Be sure you're upgraded to the current release of ImageMagick.)
+## Setting Memory/Resource limits for ImageMagick
+Be sure you're upgraded to the current release of ImageMagick.
 
 set limits on disk, area, map and ram usage
 obtain/print a hash of default limits:
@@ -66,11 +70,14 @@ current\_limits shows same values:
     MojoMagick::set_limits(:area => '32mb', :disk => '0', :memory => '64mb', :map => '32mb')
     puts MojoMagick::get_current_limits.inspect
 
-### More sample code (thanks to Elliot Nelson for adding this code to the system)
-Two command-line builders, #convert and #mogrify, have been added to simplify
-complex commands. Examples included below.
+As of ImageMagick 6.6, you also have the ability to set {{:threads}} and {{:time}}.  Read [ImageMagick docs on limits](http://www.imagemagick.org/script/command-line-options.php#limit) for more info.
 
-    # Example #convert usage:
+## For more complex operations (thanks to Elliot Nelson for adding this code to the system)
+
+Two command-line builders, #convert and #mogrify, have been added to simplify
+complex commands.
+
+### using #convert
 
     MojoMagick::convert('source.jpg', 'dest.jpg') do |c|
       c.crop '250x250+0+0'
@@ -82,7 +89,8 @@ complex commands. Examples included below.
     # Equivalent to:
     MojoMagick::raw_command('convert', 'source.jpg -crop 250x250+0+0 +repage -strip -set comment "my favorite file" dest.jpg')
 
-    # Example #mogrify usage:
+
+### using #mogrify
 
     MojoMagick::mogrify('image.jpg') {|i| i.shave '10x10'}
 
@@ -117,6 +125,12 @@ Contact author or discuss MojoMagick here: http://www.misuse.org/science/2008/01
 * added ability to do fill + crop resizing
 * bumped version to 0.3.0
 * new github repo https://github.com/bunnymatic/mojo_magick
+
+
+References
+==========
+
+* [ImageMagick](http://www.imagemagick.org/)
 
 Copyright (c) 2008 Steve Midgley, released under the MIT license
  Credit to Elliot Nelson for significant code contributions. Thanks Elliot!
