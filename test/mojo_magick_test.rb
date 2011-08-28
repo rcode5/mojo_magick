@@ -78,7 +78,6 @@ class MojoMagickTest < Test::Unit::TestCase
     assert_equal 1000, new_dimensions[:height]
     assert_equal 666, new_dimensions[:width]
 
-
     # test bad images
     bad_image = File::join(@working_path, 'not_an_image.jpg')
     zero_image = File::join(@working_path, 'zero_byte_image.jpg')
@@ -87,12 +86,32 @@ class MojoMagickTest < Test::Unit::TestCase
     assert_raise(MojoMagick::MojoFailed) {MojoMagick::get_image_size('/file_does_not_exist_here_ok.jpg')}
   end
 
+  def test_resize_with_fill
+    reset_images
+    test_image = File::join(@working_path, '5742.jpg')
+    orig_image_size = File::size(test_image)
+    MojoMagick::resize(test_image, test_image, {:fill => true, :width => 100, :height => 100})
+    dim = MojoMagick::get_image_size(test_image)
+    assert_equal 100, dim[:width] 
+    assert_equal 150, dim[:height] 
+  end
+
+  def test_resize_with_fill_and_crop
+    reset_images
+    test_image = File::join(@working_path, '5742.jpg')
+    orig_image_size = File::size(test_image)
+    MojoMagick::resize(test_image, test_image, {:fill => true, :crop => true, :width => 150, :height => 120})
+    dim = MojoMagick::get_image_size(test_image)
+    assert_equal 150, dim[:width]
+    assert_equal 120, dim[:height] 
+  end
+
   def test_resource_limits
     orig_limits = MojoMagick::get_default_limits
-    assert_equal 5, orig_limits.size
+    assert_equal 7, orig_limits.size
     orig_limits_test = orig_limits.dup
     orig_limits_test.delete_if do |resource, value|
-      assert [:area, :map, :disk, :memory, :file].include?(resource), "Found unexpected resource #{resource}"
+      assert [:area, :map, :disk, :memory, :file, :thread, :time].include?(resource), "Found unexpected resource #{resource}"
       true
     end
     assert_equal 0, orig_limits_test.size
@@ -100,7 +119,7 @@ class MojoMagickTest < Test::Unit::TestCase
     # set area to 32mb limit
     MojoMagick::set_limits(:area => '32mb')
     new_limits = MojoMagick::get_current_limits
-    assert_equal '32mb', new_limits[:area]
+    assert_equal '32mb', new_limits[:area].downcase
 
     # remove limits on area
     MojoMagick::remove_limits(:area)
@@ -110,7 +129,7 @@ class MojoMagickTest < Test::Unit::TestCase
     # set memory to 64 mb, disk to 0 and
     MojoMagick::set_limits(:memory => '64mb', :disk => '0b')
     new_limits = MojoMagick::get_current_limits(:show_actual_values => true)
-    assert_equal 64 * (2 ** 20), new_limits[:memory]
+    assert_equal 61, new_limits[:memory]
     assert_equal 0, new_limits[:disk]
 
     # return to original/default limit values

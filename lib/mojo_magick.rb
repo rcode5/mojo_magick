@@ -106,14 +106,22 @@ module MojoMagick
     scale_options << '">"' unless options[:shrink_only].nil?
     scale_options << '"<"' unless options[:expand_only].nil?
     scale_options << '"!"' unless options[:absolute_aspect].nil?
+    scale_options << '"^"' unless options[:fill].nil?
     scale_options = scale_options.join(' ')
+    
+    extras = []
     if !options[:width].nil? && !options[:height].nil?
-      retval = raw_command("convert", "\"#{source_file}\" -resize #{options[:width]}X#{options[:height]}#{scale_options} \"#{dest_file}\"")
+      geometry = "#{options[:width]}X#{options[:height]}"
     elsif !options[:percent].nil?
-      retval = raw_command("convert", "\"#{source_file}\" -resize #{options[:percent]}%#{scale_options} \"#{dest_file}\"")
+      geometry = "#{options[:percent]}%"
     else
       raise MojoMagickError, "Unknown options for method resize: #{options.inspect}"
     end
+    if !options[:fill].nil? && !options[:crop].nil?
+      extras << "-extent #{geometry}"
+      extras << "-gravity center"
+    end
+    retval = raw_command("convert", "\"#{source_file}\" -resize #{geometry}#{scale_options} #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
   end
 

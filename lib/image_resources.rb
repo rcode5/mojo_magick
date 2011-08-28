@@ -75,8 +75,10 @@ module ImageMagickResources
         row_limits = raw_limits.split("\n")
         header = row_limits[0].chomp
         data = row_limits[2].chomp
-        resources = header.scan(/^ *([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+)/)[0]
-        limits = data.scan(/^ *([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+)/)[0]
+        resources = header.strip.split
+        limits = data.strip.split
+        #resources = header.scan(/^ *([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+) +([A-Z][a-z]+)/)[0]
+        #limits = data.scan(/^ *([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+) +([0-9]+[.0-9a-z]+)/)[0]
         actual_values = {}
         readable_values = {}
         resources.each_index do |i|

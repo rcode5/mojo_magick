@@ -99,5 +99,14 @@ Availablility
 SVN Repo access from here: http://trac.misuse.org/science/wiki/MojoMagick
 Contact author or discuss MojoMagick here: http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/
 
+
+Updates by Jon Rogers (jon@2rye.com)
+------------------------------------
+# added gemspec for building gem with bundler
+# updated tests for ImageMagick 6.6
+# added ability to do fill + crop resizing
+# bumped version to 0.3.0
+
+
 Copyright (c) 2008 Steve Midgley, released under the MIT license
  Credit to Elliot Nelson for significant code contributions. Thanks Elliot!
