@@ -118,8 +118,8 @@ module MojoMagick
       raise MojoMagickError, "Unknown options for method resize: #{options.inspect}"
     end
     if !options[:fill].nil? && !options[:crop].nil?
-      extras << "-extent #{geometry}"
       extras << "-gravity Center"
+      extras << "-extent #{geometry}"
     end
     retval = raw_command("convert", "\"#{source_file}\" -resize #{geometry}#{scale_options} #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
