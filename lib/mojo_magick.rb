@@ -119,7 +119,7 @@ module MojoMagick
     end
     if !options[:fill].nil? && !options[:crop].nil?
       extras << "-extent #{geometry}"
-      extras << "-gravity center"
+      extras << "-gravity Center"
     end
     retval = raw_command("convert", "\"#{source_file}\" -resize #{geometry}#{scale_options} #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
