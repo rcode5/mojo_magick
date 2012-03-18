@@ -195,18 +195,13 @@ module MojoMagick
     alias files file
 
     # Create a temporary file for the given image and add to command line
-    def rgb8(*args)
+    def blob(*args)
       data = args[0]
-      opts = args[1]
+      opts = args[1] || {}
       [:format, :depth, :size].each do |opt|
-        self.send(opt.to_s, opts[opt].to_s) if opts[opt].to_s
+        self.send(opt, opts[opt].to_s) if opts[opt]
       end
       file MojoMagick::tempfile(data, opts)
-
-    end
-
-    def blob(arg)
-      file MojoMagick::tempfile(arg)
     end
 
     # Generic commands. Arguments will be formatted if necessary

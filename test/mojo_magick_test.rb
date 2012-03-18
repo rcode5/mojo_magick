@@ -269,7 +269,7 @@ class MojoMagickTest < Test::Unit::TestCase
     bdata = 'aaaaaabbbbbbccc'
     out = 'out.png'
     MojoMagick::convert do |c|
-      c.rgb8 bdata, :format => :rgb, :depth => 8, :size => '5x1'
+      c.blob bdata, :format => :rgb, :depth => 8, :size => '5x1'
       c.file out
     end
     r = MojoMagick::get_image_size(out)
@@ -279,7 +279,7 @@ class MojoMagickTest < Test::Unit::TestCase
     bdata = '1111222233334444'
     out = 'out.png'
     MojoMagick::convert do |c|
-      c.rgb8 bdata, :format => :rgba, :depth => 8, :size => '4x1'
+      c.blob bdata, :format => :rgba, :depth => 8, :size => '4x1'
       c.file out
     end
     r = MojoMagick::get_image_size(out)
