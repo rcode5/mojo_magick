@@ -69,7 +69,6 @@ module MojoMagick
     err_pipe = windows? ? "2>nul" : "2>/dev/null"
     begin
       execute = "#{command} #{get_limits_as_params} #{args} #{err_pipe}"
-      puts execute
       retval = `#{execute}`
     # guarantee that only MojoError exceptions are raised here
     rescue Exception => e
