@@ -69,6 +69,7 @@ module MojoMagick
     err_pipe = windows? ? "2>nul" : "2>/dev/null"
     begin
       execute = "#{command} #{get_limits_as_params} #{args} #{err_pipe}"
+      puts execute
       retval = `#{execute}`
     # guarantee that only MojoError exceptions are raised here
     rescue Exception => e
@@ -195,13 +196,21 @@ module MojoMagick
     alias files file
 
     # Create a temporary file for the given image and add to command line
+    def format(*args)
+      @opts << '-format' 
+      args.each do |arg|
+        add_formatted arg
+      end
+    end
+      
     def blob(*args)
       data = args[0]
       opts = args[1] || {}
-      [:format, :depth, :size].each do |opt|
-        self.send(opt, opts[opt].to_s) if opts[opt]
+      opts.each do |k,v|
+        send(k.to_s,v.to_s)
       end
-      file MojoMagick::tempfile(data, opts)
+      tmpfile = MojoMagick::tempfile(data, opts)
+      file tmpfile
     end
 
     # Generic commands. Arguments will be formatted if necessary
