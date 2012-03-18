@@ -52,8 +52,6 @@ require 'tempfile'
 #
 module MojoMagick
 
-  VERSION = "0.2.0"
-
   class MojoMagickException < StandardError; end
   class MojoError < MojoMagickException; end
   class MojoFailed < MojoMagickException; end
@@ -154,6 +152,23 @@ module MojoMagick
     raw_command('mogrify', opts.to_s)
   end
 
+  
+  def MojoMagick::tempfile(*opts)
+    begin
+      data = opts[0]
+      rest = opts[1]
+      ext = rest && rest[:format]
+      file = Tempfile.new(["mojo", ext ? '.' + ext.to_s : ''])
+      file.binmode
+      file.write(data)
+      file.path
+    rescue Exception => ex
+      raise
+    end
+  ensure
+    file.close
+  end
+
   # Option builder used in #convert and #mogrify helpers.
   class OptBuilder
     def initialize
@@ -180,6 +195,16 @@ module MojoMagick
     alias files file
 
     # Create a temporary file for the given image and add to command line
+    def rgb8(*args)
+      data = args[0]
+      opts = args[1]
+      [:format, :depth, :size].each do |opt|
+        self.send(opt.to_s, opts[opt].to_s) if opts[opt].to_s
+      end
+      file MojoMagick::tempfile(data, opts)
+
+    end
+
     def blob(arg)
       file MojoMagick::tempfile(arg)
     end
@@ -210,15 +235,6 @@ module MojoMagick
         @opts << arg
       end
     end
-  end
-
-  def MojoMagick::tempfile(data)
-    file = Tempfile.new("mojo")
-    file.binmode
-    file.write(data)
-    file.path
-  ensure
-    file.close
   end
     
 end # MojoMagick

@@ -99,10 +99,11 @@ complex commands.
     MojoMagick::raw_command('mogrify', '-shave 10x10 image.jpg')
 
     # Example showing some additional options:
+    # assuming binary data that is rgb, 8bit depth and 10x20 pixels, :format => :rgb, :depth => 8, :size => '10x20'OAu
     
     MojoMagick::convert do |c|
       c.file 'source.jpg'
-      c.blob my_binary_data
+      c.blob my_binary_data, :format => :rgb, :depth => 8, :size => '10x20'
       c.append
       c.crop '256x256+0+0'
       c.repage!
@@ -112,6 +113,14 @@ complex commands.
     # Use .file to specify file names, .blob to create and include a tempfile. The
     # bang (!) can be appended to command names to use the '+' versions
     # instead of '-' versions.
+
+### Create a brand new image from data
+
+    binary_data = '1111222233334444'
+    MojoMagick::convert do |c|
+      c.rgba8 binary_data, :format => :rgba, :depth => 8, :size => '2x2'
+      c.file 'output.jpg'
+    end
 
 Availablility
 =============

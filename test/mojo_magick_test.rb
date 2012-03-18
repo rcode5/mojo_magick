@@ -221,6 +221,7 @@ class MojoMagickTest < Test::Unit::TestCase
     File.open(filename, 'rb') do |f|
       assert_equal f.read, 'binary data'
     end
+        
   end
 
   def test_command_helpers
@@ -263,5 +264,27 @@ class MojoMagickTest < Test::Unit::TestCase
     retval = MojoMagick::get_image_size(out_image)
     assert_equal 50, retval[:width]
     assert_equal 50, retval[:height]
+
+    # RGB8 test
+    bdata = 'aaaaaabbbbbbccc'
+    out = 'out.png'
+    MojoMagick::convert do |c|
+      c.rgb8 bdata, :format => :rgb, :depth => 8, :size => '5x1'
+      c.file out
+    end
+    r = MojoMagick::get_image_size(out)
+    assert r[:height] == 1
+    assert r[:width] == 5
+
+    bdata = '1111222233334444'
+    out = 'out.png'
+    MojoMagick::convert do |c|
+      c.rgb8 bdata, :format => :rgba, :depth => 8, :size => '4x1'
+      c.file out
+    end
+    r = MojoMagick::get_image_size(out)
+    assert r[:height] == 1
+    assert r[:width] == 4
+    
   end
 end
