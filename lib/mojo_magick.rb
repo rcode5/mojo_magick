@@ -101,11 +101,11 @@ module MojoMagick
   def MojoMagick::resize(source_file, dest_file, options)
     retval = nil
     scale_options = []
-    scale_options << '">"' unless options[:shrink_only].nil?
-    scale_options << '"<"' unless options[:expand_only].nil?
-    scale_options << '"!"' unless options[:absolute_aspect].nil?
-    scale_options << '"^"' unless options[:fill].nil?
-    scale_options = scale_options.join(' ')
+    scale_options << ">" unless options[:shrink_only].nil?
+    scale_options << "<" unless options[:expand_only].nil?
+    scale_options << "!" unless options[:absolute_aspect].nil?
+    scale_options << "^" unless options[:fill].nil?
+    scale_options = scale_options.join
     
     extras = []
     if !options[:width].nil? && !options[:height].nil?
@@ -119,7 +119,7 @@ module MojoMagick
       extras << "-gravity Center"
       extras << "-extent #{geometry}"
     end
-    retval = raw_command("convert", "\"#{source_file}\" -resize #{geometry}#{scale_options} #{extras.join(' ')} \"#{dest_file}\"")
+    retval = raw_command("convert", "\"#{source_file}\" -resize \"#{geometry}#{scale_options}\" #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
   end
 
