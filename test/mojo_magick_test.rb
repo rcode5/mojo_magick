@@ -18,66 +18,96 @@ class MojoMagickTest < Test::Unit::TestCase
     Dir::glob(File::join(@fixtures_path, '*')).each do |file|
       FileUtils::cp(file, @working_path) if File::file?(file)
     end
+    @test_image = File::join(@working_path, '5742.jpg')
+
   end
 
-  def test_image_management
+  def test_get_image_size
     reset_images
-    test_image = File::join(@working_path, '5742.jpg')
-    orig_image_size = File::size(test_image)
-    retval = MojoMagick::get_image_size(test_image)
-    assert_equal orig_image_size, File::size(test_image)
+    orig_image_size = File::size(@test_image)
+    retval = MojoMagick::get_image_size(@test_image)
+    assert_equal orig_image_size, File::size(@test_image)
     assert_equal 500, retval[:height]
     assert_equal 333, retval[:width]
+  end
 
+  def test_image_resize
     # test basic resizing
+    reset_images
+    orig_image_size = File::size(@test_image)
     size_test_temp = Tempfile::new('mojo_test')
     size_test = size_test_temp.path
-    retval = MojoMagick::resize(test_image, size_test, {:width=>100, :height=>100})
+    retval = MojoMagick::resize(@test_image, size_test, {:width=>100, :height=>100})
     assert_equal size_test, retval
-    assert_equal orig_image_size, File::size(test_image)
+    assert_equal orig_image_size, File::size(@test_image)
     assert_equal retval, size_test
     new_dimensions = MojoMagick::get_image_size(size_test)
     assert_equal 100, new_dimensions[:height]
     assert_equal 67, new_dimensions[:width]
 
     # we should be able to resize image right over itself
-    retval = MojoMagick::resize(test_image, test_image, {:width=>100, :height=>100})
-    assert_equal test_image, retval
-    assert_not_equal orig_image_size, File::size(test_image)
-    new_dimensions = MojoMagick::get_image_size(test_image)
+    retval = MojoMagick::resize(@test_image, @test_image, {:width=>100, :height=>100})
+    assert_equal @test_image, retval
+    assert_not_equal orig_image_size, File::size(@test_image)
+    new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 100, new_dimensions[:height]
     assert_equal 67, new_dimensions[:width]
+  end
 
+  def test_shrink_with_big_dimensions
     # image shouldn't resize if we specify very large dimensions and specify "shrink_only"
     reset_images
-    orig_image_size = File::size(test_image)
-    retval = MojoMagick::shrink(test_image, test_image, {:width=>1000, :height=>1000})
-    assert_equal test_image, retval
-    new_dimensions = MojoMagick::get_image_size(test_image)
+    size_test_temp = Tempfile::new('mojo_test')
+    size_test = size_test_temp.path
+    retval = MojoMagick::shrink(@test_image, size_test, {:width=>1000, :height=>1000})
+    assert_equal size_test, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 500, new_dimensions[:height]
     assert_equal 333, new_dimensions[:width]
+  end
+
+  def test_shrink
+    reset_images
     # image should resize if we specify small dimensions and shrink_only
-    retval = MojoMagick::shrink(test_image, test_image, {:width=>1000, :height=>100})
-    assert_equal test_image, retval
-    new_dimensions = MojoMagick::get_image_size(test_image)
+    retval = MojoMagick::shrink(@test_image, @test_image, {:width=>1000, :height=>100})
+    assert_equal @test_image, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 100, new_dimensions[:height]
     assert_equal 67, new_dimensions[:width]
+  end
 
+  def test_resize_with_shrink_only_options
+    reset_images
+    # image should resize if we specify small dimensions and shrink_only
+    retval = MojoMagick::resize(@test_image, @test_image, {:shrink_only => true, :width=>400, :height=>400})
+    assert_equal @test_image, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
+    assert_equal 400, new_dimensions[:height]
+    assert_equal 266, new_dimensions[:width]
+  end
+
+  def test_expand_with_small_dim
     # image shouldn't resize if we specify small dimensions and expand_only
     reset_images
-    orig_image_size = File::size(test_image)
-    retval = MojoMagick::expand(test_image, test_image, {:width=>10, :height=>10})
-    assert_equal test_image, retval
-    new_dimensions = MojoMagick::get_image_size(test_image)
+    orig_image_size = File::size(@test_image)
+    retval = MojoMagick::expand(@test_image, @test_image, {:width=>10, :height=>10})
+    assert_equal @test_image, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 500, new_dimensions[:height]
     assert_equal 333, new_dimensions[:width]
+  end
+
+  def test_expand
+    reset_images
     # image should resize if we specify large dimensions and expand_only
-    retval = MojoMagick::expand(test_image, test_image, {:width=>1000, :height=>1000})
-    assert_equal test_image, retval
-    new_dimensions = MojoMagick::get_image_size(test_image)
+    retval = MojoMagick::expand(@test_image, @test_image, {:width=>1000, :height=>1000})
+    assert_equal @test_image, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 1000, new_dimensions[:height]
     assert_equal 666, new_dimensions[:width]
+  end
 
+  def test_invalid_images
     # test bad images
     bad_image = File::join(@working_path, 'not_an_image.jpg')
     zero_image = File::join(@working_path, 'zero_byte_image.jpg')
@@ -88,20 +118,18 @@ class MojoMagickTest < Test::Unit::TestCase
 
   def test_resize_with_fill
     reset_images
-    test_image = File::join(@working_path, '5742.jpg')
-    orig_image_size = File::size(test_image)
-    MojoMagick::resize(test_image, test_image, {:fill => true, :width => 100, :height => 100})
-    dim = MojoMagick::get_image_size(test_image)
+    @test_image = File::join(@working_path, '5742.jpg')
+    MojoMagick::resize(@test_image, @test_image, {:fill => true, :width => 100, :height => 100})
+    dim = MojoMagick::get_image_size(@test_image)
     assert_equal 100, dim[:width] 
     assert_equal 150, dim[:height] 
   end
 
   def test_resize_with_fill_and_crop
     reset_images
-    test_image = File::join(@working_path, '5742.jpg')
-    orig_image_size = File::size(test_image)
-    MojoMagick::resize(test_image, test_image, {:fill => true, :crop => true, :width => 150, :height => 120})
-    dim = MojoMagick::get_image_size(test_image)
+    @test_image = File::join(@working_path, '5742.jpg')
+    MojoMagick::resize(@test_image, @test_image, {:fill => true, :crop => true, :width => 150, :height => 120})
+    dim = MojoMagick::get_image_size(@test_image)
     assert_equal 150, dim[:width]
     assert_equal 120, dim[:height] 
   end
