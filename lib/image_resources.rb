@@ -115,6 +115,7 @@ module ImageMagickResources
     # that contains all the limit constraints
     def get_limits_as_params
       retval = ''
+      # we upcase the value here for newer versions of ImageMagick (>=6.8.x)
       @@resource_limits.each do |type, value|
         retval += " -limit #{type.to_s} #{value.upcase} "
       end
