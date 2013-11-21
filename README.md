@@ -41,7 +41,7 @@ After this transformation, your image will be 100x100.  But it does not distort 
 ### Code sample of how to shrink all jpg's in a folder
 
     require 'mojo_magick'
-    
+
     image_folder = '/tmp/img'
     Dir::glob(File::join(image_folder, '*.jpg')).each do |image|
       begin
@@ -85,7 +85,7 @@ complex commands.
       c.strip
       c.set 'comment', 'my favorite file'
     end
-    
+
     # Equivalent to:
     MojoMagick::raw_command('convert', 'source.jpg -crop 250x250+0+0 +repage -strip -set comment "my favorite file" dest.jpg')
 
@@ -100,7 +100,7 @@ complex commands.
 
     # Example showing some additional options:
     # assuming binary data that is rgb, 8bit depth and 10x20 pixels, :format => :rgb, :depth => 8, :size => '10x20'OAu
-    
+
     MojoMagick::convert do |c|
       c.file 'source.jpg'
       c.blob my_binary_data, :format => :rgb, :depth => 8, :size => '10x20'
@@ -109,7 +109,7 @@ complex commands.
       c.repage!
       c.file 'output.jpg'
     end
-    
+
     # Use .file to specify file names, .blob to create and include a tempfile. The
     # bang (!) can be appended to command names to use the '+' versions
     # instead of '-' versions.
@@ -120,6 +120,19 @@ complex commands.
     MojoMagick::convert do |c|
       c.rgba8 binary_data, :format => :rgba, :depth => 8, :size => '2x2'
       c.file 'output.jpg'
+    end
+
+### Create a new image with text
+
+Note: Use with care.  If you don't have fonts installed ImageMagick can spin off wildly leaving MojoMagick not knowing what to do.  For Unix/MacOSX, you should install freetype and ghostscript.
+
+    MojoMagick::convert(nil, fname) do |c|
+      c.background 'black'
+      c.fill 'white'
+      c.gravity 'center'
+      c.pointsize 80
+      c.size '200x200'
+      c.label 'the bird is the word'
     end
 
 Availablility

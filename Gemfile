@@ -1,2 +1,3 @@
-source :rubygems
-gem 'rake'
+source 'https://rubygems.org'
+
+gemspec
