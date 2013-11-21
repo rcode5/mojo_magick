@@ -93,7 +93,7 @@ module ImageMagickResources
               scaled_value = unscaled_value * (2 ** 50)
             when 'tb'
               scaled_value = unscaled_value * (2 ** 40)
-            when 'gb',
+            when 'gb'
               scaled_value = unscaled_value * (2 ** 30)
             when 'mb'
               scaled_value = unscaled_value * (2 ** 20)
