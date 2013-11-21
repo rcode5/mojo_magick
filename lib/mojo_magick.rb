@@ -22,7 +22,7 @@ require 'tempfile'
 #     c.strip
 #     c.set 'comment', 'my favorite file'
 #   end
-# 
+#
 # Equivalent to:
 #
 #   MojoMagick::raw_command('convert', 'source.jpg -crop 250x250+0+0 +repage -strip -set comment "my favorite file" dest.jpg')
@@ -32,7 +32,7 @@ require 'tempfile'
 #   MojoMagick::mogrify('image.jpg') {|i| i.shave '10x10'}
 #
 # Equivalent to:
-# 
+#
 #   MojoMagick::raw_command('mogrify', '-shave 10x10 image.jpg')
 #
 # Example showing some additional options:
@@ -106,7 +106,7 @@ module MojoMagick
     scale_options << "!" unless options[:absolute_aspect].nil?
     scale_options << "^" unless options[:fill].nil?
     scale_options = scale_options.join
-    
+
     extras = []
     if !options[:width].nil? && !options[:height].nil?
       geometry = "#{options[:width]}X#{options[:height]}"
@@ -152,7 +152,7 @@ module MojoMagick
     raw_command('mogrify', opts.to_s)
   end
 
-  
+
   def MojoMagick::tempfile(*opts)
     begin
       data = opts[0]
@@ -194,14 +194,18 @@ module MojoMagick
     end
     alias files file
 
+    def label(*args)
+      @opts << "label:\"#{args.join}\""
+    end
+
     # Create a temporary file for the given image and add to command line
     def format(*args)
-      @opts << '-format' 
+      @opts << '-format'
       args.each do |arg|
         add_formatted arg
       end
     end
-      
+
     def blob(*args)
       data = args[0]
       opts = args[1] || {}
@@ -221,7 +225,7 @@ module MojoMagick
       end
       args.each do |arg|
         add_formatted arg
-      end 
+      end
       self
     end
 
@@ -239,7 +243,5 @@ module MojoMagick
       end
     end
   end
-    
+
 end # MojoMagick
-
-
