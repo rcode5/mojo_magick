@@ -12,10 +12,12 @@ Gem::Specification.new do |s|
   s.description = %q{Simple Ruby stateless module interface to imagemagick.}
 
   s.rubyforge_project = "mojo_magick"
-  
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.add_development_dependency('rake')
+  s.add_development_dependency('simplecov')
+  s.add_development_dependency('rspec-expectations')
 end
