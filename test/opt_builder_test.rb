@@ -82,10 +82,10 @@ class MojoMagickOptBuilderTest < Test::Unit::TestCase
     [[ 'mylabel', 'mylabel' ],
      [ 'Rock it', '"Rock it"'],
      [ '#$%^&*', '"#$%^&*"']].each do |labels|
-      
+
       b = MojoMagick::OptBuilder.new
       b.label labels[0]
-      assert_equal b.to_s,"label:#{labels[1]}"
+      expect(b.to_s).to eql "label:#{labels[1]}"
     end
 
   end

@@ -93,7 +93,7 @@ module ImageMagickResources
               scaled_value = unscaled_value * (2 ** 50)
             when 'tb'
               scaled_value = unscaled_value * (2 ** 40)
-            when 'gb'
+            when 'gb',
               scaled_value = unscaled_value * (2 ** 30)
             when 'mb'
               scaled_value = unscaled_value * (2 ** 20)
@@ -116,7 +116,7 @@ module ImageMagickResources
     def get_limits_as_params
       retval = ''
       @@resource_limits.each do |type, value|
-        retval += " -limit #{type.to_s} #{value} "
+        retval += " -limit #{type.to_s} #{value.upcase} "
       end
       retval
     end
