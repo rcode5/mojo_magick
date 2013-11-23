@@ -80,6 +80,7 @@ class MojoMagickOptBuilderTest < Test::Unit::TestCase
 
     #label for text should use 'label:"the string"' if specified
     [[ 'mylabel', 'mylabel' ],
+     [ 'my " label', '"my \" label"' ],
      [ 'Rock it, cuz i said so!', '"Rock it, cuz i said so!"'],
      [ "it's like this", '"it\'s like this"'],
      [ '#$%^&*', '"#$%^&*"']].each do |labels|
