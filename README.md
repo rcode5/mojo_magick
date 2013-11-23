@@ -122,6 +122,14 @@ complex commands.
       c.file 'output.jpg'
     end
 
+### Get a list of available fonts
+
+    fonts = MojoMagick::get_fonts
+
+    fonts.first
+    => #<MojoMagick::Font:0x000001015a8b90 @name="AvantGarde-Book", @family="AvantGarde", @style="Normal", @stretch="Normal", @weight="400", @glyphs="/usr/local/share/ghostscript/fonts/a010013l.pfb">
+
+
 ### Create a new image with text
 
 Note: Use with care.  If you don't have fonts installed ImageMagick can spin off wildly leaving MojoMagick not knowing what to do.  For Unix/MacOSX, you should install freetype and ghostscript.
