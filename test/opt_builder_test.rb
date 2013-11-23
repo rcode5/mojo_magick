@@ -80,12 +80,13 @@ class MojoMagickOptBuilderTest < Test::Unit::TestCase
 
     #label for text should use 'label:"the string"' if specified
     [[ 'mylabel', 'mylabel' ],
-     [ 'Rock it', '"Rock it"'],
+     [ 'Rock it, cuz i said so!', '"Rock it, cuz i said so!"'],
+     [ "it's like this", '"it\'s like this"'],
      [ '#$%^&*', '"#$%^&*"']].each do |labels|
 
       b = MojoMagick::OptBuilder.new
       b.label labels[0]
-      expect(b.to_s).to eql "label:#{labels[1]}"
+      assert_equal "label:#{labels[1]}", b.to_s
     end
 
   end

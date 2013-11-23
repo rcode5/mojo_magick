@@ -70,8 +70,8 @@ module MojoMagick
     end
 
     def quoted_arg(arg)
-      return arg unless arg =~ /[<>^|&();` ]/
-      [ '"', arg.gsub('"', '\"'), '"'].join
+      return arg unless arg =~ /['<>^|&();` ]/
+      [ '"', arg.gsub('"', '\"').gsub("'", "\'"), '"'].join
     end
   end
 end
