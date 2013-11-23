@@ -1,6 +1,11 @@
 cwd = File::dirname(__FILE__)
-require File::join(cwd, 'image_resources')
+initializers_dir = File::expand_path(File::join(cwd, 'initializers'))
+Dir.glob(File::join(initializers_dir, '*.rb')).each { |f| require f }
+require File::join(cwd, 'mojo_magick/util/parser')
+require File::join(cwd, 'image_magick/resource_limits')
+require File::join(cwd, 'image_magick/fonts')
 require File::join(cwd, 'mojo_magick/opt_builder')
+require File::join(cwd, 'mojo_magick/font')
 require 'tempfile'
 
 
@@ -60,7 +65,8 @@ module MojoMagick
   class MojoFailed < MojoMagickException; end
 
   # enable resource limiting functionality
-  extend ImageMagickResources::ResourceLimits
+  extend ImageMagick::ResourceLimits
+  extend ImageMagick::Fonts
 
   def MojoMagick::windows?
     mem_fix = 1
@@ -124,6 +130,11 @@ module MojoMagick
     end
     retval = raw_command("convert", "\"#{source_file}\" -resize \"#{geometry}#{scale_options}\" #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
+  end
+
+  def MojoMagick::available_fonts
+    # returns width, height of image if available, nil if not
+    Font.all
   end
 
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})
