@@ -139,6 +139,46 @@ class MojoMagickTest < Test::Unit::TestCase
     end
   end
 
+  def test_label
+    reset_images
+    out_image = File::join(@working_path, 'label_test.png')
+
+    MojoMagick::convert do |c|
+      c.label 'rock the house'
+      c.file out_image
+    end
+  end
+
+  def test_label_with_quote
+    reset_images
+    out_image = File::join(@working_path, 'label_test.png')
+
+    MojoMagick::convert do |c|
+      c.label 'rock "the house'
+      c.file out_image
+    end
+  end
+
+  def test_label_with_apostrophe
+    reset_images
+    out_image = File::join(@working_path, 'label_test.png')
+
+    MojoMagick::convert do |c|
+      c.label 'rock \'the house'
+      c.file out_image
+    end
+  end
+
+  def test_label_with_quotes
+    reset_images
+    out_image = File::join(@working_path, 'label_test.png')
+
+    MojoMagick::convert do |c|
+      c.label 'this is "it!"'
+      c.file out_image
+    end
+  end
+
   def test_command_helpers
     reset_images
     test_image = File::join(@working_path, '5742.jpg')
