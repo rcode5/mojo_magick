@@ -5,6 +5,13 @@ module MojoMagick
       @opts = []
     end
 
+    def image_block(*args, &block)
+      @opts << '\('
+      yield block
+      @opts << '\)'
+      self
+    end
+
     # Add command-line options with no processing
     def <<(arg)
       if arg.is_a?(Array)
