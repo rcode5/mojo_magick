@@ -51,6 +51,17 @@ class MojoMagickTest < Test::Unit::TestCase
     assert_equal 67, new_dimensions[:width]
   end
 
+  def test_image_resize_with_percentage
+    reset_images
+    original_size = MojoMagick::get_image_size(@test_image)
+    retval = MojoMagick::resize(@test_image, @test_image, {:percent => 50})
+    assert_equal @test_image, retval
+    new_dimensions = MojoMagick::get_image_size(@test_image)
+    [:height, :width].each do |dim|
+      assert_equal (original_size[dim]/2.0).ceil, new_dimensions[dim]
+    end
+  end
+
   def test_shrink_with_big_dimensions
     # image shouldn't resize if we specify very large dimensions and specify "shrink_only"
     reset_images

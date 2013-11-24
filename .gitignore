@@ -4,5 +4,7 @@ fixtures/tmp
 coverage/
 .bundle/
 .\#*
+\#*
 out.png
 out.html
+*.gem

@@ -4,7 +4,19 @@ class MojoMagickOptBuilderTest < Test::Unit::TestCase
 
   # These tests make the assumption that if we call #raw_command with the
   # correct strings, ImageMagick itself will operate correctly. We're only
-  # verifying that the option builder produces the correct strings.
+  # verifying that the option builder produces the correct strings
+  def test_option_builder_with_blocks
+    # Passing in basic commands produces a string
+    b = MojoMagick::OptBuilder.new
+    b.image_block do
+      b.background 'red'
+    end
+    b.image_block do
+      b.background 'blue'
+    end
+    assert_equal '\( -background red \) \( -background blue \)', b.to_s
+  end
+
   def test_option_builder
     # Passing in basic commands produces a string
     b = MojoMagick::OptBuilder.new

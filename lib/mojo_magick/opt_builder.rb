@@ -46,6 +46,13 @@ module MojoMagick
       file tmpfile
     end
 
+    def image_block(&block)
+      @opts << '\('
+      yield block
+      @opts << '\)'
+      self
+    end
+
     # Generic commands. Arguments will be formatted if necessary
     def method_missing(command, *args)
       if command.to_s[-1, 1] == '!'
