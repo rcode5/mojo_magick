@@ -2,9 +2,9 @@ MojoMagick
 ==========
 
 MojoMagick is a "dog simple, do very little" image library. It is basically a couple of stateless
-module methods that make it somewhat more convenient than calling ImageScience by hand.
+module methods that make it somewhat more convenient than calling ImageMagick by hand.
 
-The main reason to use MojoMagick is that you should consolidate your ImageScience calls into
+The main reason to use MojoMagick is that you should consolidate your ImageMagick calls into
 one place, so why not do it here? If you improve on this tool, send me the patch.
 
 This tool came about because I wanted a fast, simple, lightweight, nothing-goes-wrong-with-it-
@@ -132,7 +132,7 @@ complex commands.
 
 ### Create a new image with text
 
-Note: Use with care.  If you don't have fonts installed ImageMagick can spin off wildly leaving MojoMagick not knowing what to do.  For Unix/MacOSX, you should install freetype and ghostscript.
+Note: Use with care.  If you don't have fonts installed ImageMagick can spin off wildly leaving MojoMagick not knowing what to do.  For Unix/MacOSX, you should install `freetype` and `ghostscript`.
 
     MojoMagick::convert(nil, fname) do |c|
       c.background 'black'
@@ -165,27 +165,46 @@ Note: Use with care.  If you don't have fonts installed ImageMagick can spin off
 
 Availablility
 =============
- * [Github Repo](http://github.com/rcode5/mojo_magick) Current support and maintenance is happening here.
- * Contact the author or discuss MojoMagick : [misuse.org](http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/)
+ * [Github Repo](http://github.com/rcode5/mojo_magick) This is the current canonical branch.
+ * Issues/Pull Requests can be submitted through the above repository.
 
+Recent Changes
+==============
 
-#### Updates by Jon Rogers Aug 2011 (http://github.com/bunnymatic)
+#### Version 0.5.0
+
+* add `LICENSE.txt` and update README
+* add `examples/` directory
+* add support for fonts
+* add support for building multi-layer images with image blocks (no explicit temp file creation)
+* [Moved repo to rcode5](http://github.com/rcode5/mojo_magick) Current support and maintenance is happening here.
+* added `simplecov` for test coverage reports
+
+#### Versions 0.4.x
+
+* Add rake tasks for gem building and tests
+* code cleanup
+* better handling of `gravity` parameter
+
+#### Version 0.3.0
+
+* Add new github repo
 * added gemspec for building gem with bundler
 * updated tests for ImageMagick 6.6
 * added ability to do fill + crop resizing
 * bumped version to 0.3.0
 * [new github repo](https://github.com/bunnymatic/mojo_magick)
 
-#### Updates by Jon Rogers Oct 2013 (http://github.com/bunnymatic)
-* add support for fonts
-* add support for building multi-layer images with image blocks (no explicit temp file creation)
-* [Moved repo to rcode5](http://github.com/rcode5/mojo_magick) Current support and maintenance is happening here.
 
 
 References
 ==========
 
+* [Original SVN MojoMagick repository](http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/) - Initiated and developed by Steve Midgley
 * [ImageMagick](http://www.imagemagick.org/)
+* [FreeType](http://www.freetype.org)
+* [Ghostscript](http://www.ghostscript.com/)
 
-Copyright (c) 2008 Steve Midgley, released under the MIT license
- Credit to Elliot Nelson for significant code contributions. Thanks Elliot!
+Copyright (c) 2013 Jon Rogers
+Copyright (c) 2008 Steve Midgley, released under the [MIT license](LICENSE.txt)
+Credit to Elliot Nelson for significant code contributions. Thanks Elliot!
