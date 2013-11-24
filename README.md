@@ -1,6 +1,5 @@
 MojoMagick
 ==========
-
 MojoMagick is a "dog simple, do very little" image library. It is basically a couple of stateless
 module methods that make it somewhat more convenient than calling ImageMagick by hand.
 
@@ -9,6 +8,21 @@ one place, so why not do it here? If you improve on this tool, send me the patch
 
 This tool came about because I wanted a fast, simple, lightweight, nothing-goes-wrong-with-it-
 because-it's-too-simple-to-break image tool.
+
+[![Gem Version](https://badge.fury.io/rb/mojo_magick.png)](http://badge.fury.io/rb/mojo_magick)
+
+Using it
+========
+
+Add to your Gemfile
+
+    gem 'mojo_magick'
+    
+Require it in your ruby code
+
+    require 'mojo_magick'
+    
+Go to town! Check out a couple of simple [examples, here](examples/)
 
 Examples
 ========
