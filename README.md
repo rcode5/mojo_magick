@@ -143,11 +143,30 @@ Note: Use with care.  If you don't have fonts installed ImageMagick can spin off
       c.label 'the bird is the word'
     end
 
+### Generate a composite
+
+    MojoMagick::convert(nil, 'composite_out.png') do |c|
+      c.size '200x200'
+      c.image_block do # first layer
+        c.background 'blue'
+        c.fill 'white'
+        c.gravity 'northwest'
+        c.label 'NW'
+      end
+      c.image_block do # second layer
+        c.background 'transparent'
+        c.fill 'red'
+        c.gravity 'southeast'
+        c.label 'SE'
+      end
+      c.composite
+    end
+
+
 Availablility
 =============
-
- * [SVN Repo access](http://trac.misuse.org/science/wiki/MojoMagick)
- * Concact the author or discuss MojoMagick : [misuse.org](http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/)
+ * [Github Repo](http://github.com/rcode5/mojo_magick) Current support and maintenance is happening here.
+ * Contact the author or discuss MojoMagick : [misuse.org](http://www.misuse.org/science/2008/01/30/mojomagick-ruby-image-library-for-imagemagick/)
 
 
 #### Updates by Jon Rogers Aug 2011 (http://github.com/bunnymatic)
@@ -156,6 +175,11 @@ Availablility
 * added ability to do fill + crop resizing
 * bumped version to 0.3.0
 * [new github repo](https://github.com/bunnymatic/mojo_magick)
+
+#### Updates by Jon Rogers Oct 2013 (http://github.com/bunnymatic)
+* add support for fonts
+* add support for building multi-layer images with image blocks (no explicit temp file creation)
+* [Moved repo to rcode5](http://github.com/rcode5/mojo_magick) Current support and maintenance is happening here.
 
 
 References

@@ -5,13 +5,6 @@ module MojoMagick
       @opts = []
     end
 
-    def image_block(*args, &block)
-      @opts << '\('
-      yield block
-      @opts << '\)'
-      self
-    end
-
     # Add command-line options with no processing
     def <<(arg)
       if arg.is_a?(Array)
@@ -51,6 +44,13 @@ module MojoMagick
       end
       tmpfile = MojoMagick::tempfile(data, opts)
       file tmpfile
+    end
+
+    def image_block(&block)
+      @opts << '\('
+      yield block
+      @opts << '\)'
+      self
     end
 
     # Generic commands. Arguments will be formatted if necessary
