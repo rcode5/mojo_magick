@@ -14,7 +14,7 @@ EOF
 
 Gem::Specification.new do |s|
   s.name        = "mojo_magick"
-  spec.license  = 'MIT'
+  s.license  = 'MIT'
   s.version     = MojoMagick::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Steve Midgley", "Elliot Nelson", "Jon Rogers"]
