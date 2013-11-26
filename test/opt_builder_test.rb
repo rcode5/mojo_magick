@@ -17,6 +17,12 @@ class MojoMagickOptBuilderTest < Test::Unit::TestCase
     assert_equal '\( -background red \) \( -background blue \)', b.to_s
   end
 
+  def test_option_builder_with_hex_colors 
+    b = MojoMagick::OptBuilder.new
+    b.background '#000000'
+    assert_equal '-background "#000000"', b.to_s
+  end
+
   def test_option_builder
     # Passing in basic commands produces a string
     b = MojoMagick::OptBuilder.new
