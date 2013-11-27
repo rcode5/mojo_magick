@@ -16,7 +16,7 @@ Font: Zapf-Dingbats
     glyphs: /Library/Fonts/Zapfino.ttf
 EOF
 
-class FontTest < Test::Unit::TestCase
+class FontTest < MiniTest::Unit::TestCase
 
   def test_font
     f = MojoMagick::Font.new

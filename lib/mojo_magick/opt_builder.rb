@@ -28,6 +28,18 @@ module MojoMagick
       @opts << "label:#{quoted_arg(args.join)}"
     end
 
+    # annotate takes non-standard args
+    def annotate(*args)
+      @opts << '-annotate'
+      arguments = args.join.split
+      if arguments.length == 1
+        arguments.unshift '0'
+      end
+      arguments.each do |arg|
+        add_formatted arg
+      end
+    end
+
     # Create a temporary file for the given image and add to command line
     def format(*args)
       @opts << '-format'

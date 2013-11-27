@@ -1,10 +1,30 @@
 require File::join(File::dirname(__FILE__), 'test_helper')
 
-class MojoMagickOptBuilderTest < Test::Unit::TestCase
+class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
 
   # These tests make the assumption that if we call #raw_command with the
   # correct strings, ImageMagick itself will operate correctly. We're only
   # verifying that the option builder produces the correct strings
+
+  def setup
+    @builder = MojoMagick::OptBuilder.new
+  end
+
+  def test_annotate
+    @builder.annotate 'blah'
+    assert_equal  '-annotate 0 blah', @builder.to_s
+  end
+
+  def test_annotate_with_escapeable_string
+    @builder.annotate 'it\'s'
+    assert_equal '-annotate 0 "it\'s"', @builder.to_s
+  end
+
+  def test_annotate_with_full_args
+    @builder.annotate '5 it\'s'
+    assert_equal '-annotate 5 "it\'s"', @builder.to_s
+  end
+
   def test_option_builder_with_blocks
     # Passing in basic commands produces a string
     b = MojoMagick::OptBuilder.new

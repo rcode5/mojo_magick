@@ -31,7 +31,8 @@ module ImageMagick
       def remove_limits(*options)
         mem_fix = 1
         @@resource_limits.delete_if do |resource, value|
-          resource == options.values_at(options.index(resource))[0].to_s.downcase.to_sym
+          idx = options.index(resource)
+          resource == options.values_at(idx)[0].to_s.downcase.to_sym if idx
         end
       end
 

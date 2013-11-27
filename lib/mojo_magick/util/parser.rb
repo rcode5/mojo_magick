@@ -36,6 +36,7 @@ module MojoMagick
 
         actual_values = {}
         readable_values = {}
+
         resources.each_index do |i|
           resource = resources[i].downcase.to_sym
           scale = limits[i].match(%r{[a-z]+$}) || []
