@@ -1,6 +1,6 @@
 require File::join(File::dirname(__FILE__), 'test_helper')
 
-class MojoMagickTest < Test::Unit::TestCase
+class MojoMagickTest < MiniTest::Unit::TestCase
 
   # we keep a fixtures path and a working path so that we can easily test image
   # manipulation routines without tainting the original images
@@ -45,7 +45,7 @@ class MojoMagickTest < Test::Unit::TestCase
     # we should be able to resize image right over itself
     retval = MojoMagick::resize(@test_image, @test_image, {:width=>100, :height=>100})
     assert_equal @test_image, retval
-    assert_not_equal orig_image_size, File::size(@test_image)
+    refute_equal orig_image_size, File::size(@test_image)
     new_dimensions = MojoMagick::get_image_size(@test_image)
     assert_equal 100, new_dimensions[:height]
     assert_equal 67, new_dimensions[:width]
@@ -119,9 +119,9 @@ class MojoMagickTest < Test::Unit::TestCase
     # test bad images
     bad_image = File::join(@working_path, 'not_an_image.jpg')
     zero_image = File::join(@working_path, 'zero_byte_image.jpg')
-    assert_raise(MojoMagick::MojoFailed) {MojoMagick::get_image_size(bad_image)}
-    assert_raise(MojoMagick::MojoFailed) {MojoMagick::get_image_size(zero_image)}
-    assert_raise(MojoMagick::MojoFailed) {MojoMagick::get_image_size('/file_does_not_exist_here_ok.jpg')}
+    assert_raises(MojoMagick::MojoFailed) {MojoMagick::get_image_size(bad_image)}
+    assert_raises(MojoMagick::MojoFailed) {MojoMagick::get_image_size(zero_image)}
+    assert_raises(MojoMagick::MojoFailed) {MojoMagick::get_image_size('/file_does_not_exist_here_ok.jpg')}
   end
 
   def test_resize_with_fill

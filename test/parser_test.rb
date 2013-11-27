@@ -19,7 +19,7 @@ Font: Zapf-Dingbats
 
 EOF
 
-class ParserTest < Test::Unit::TestCase
+class ParserTest < MiniTest::Unit::TestCase
 
   def test_parse_fonts
     parser = MojoMagick::Util::Parser.new
