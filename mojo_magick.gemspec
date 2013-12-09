@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.version     = MojoMagick::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Steve Midgley", "Elliot Nelson", "Jon Rogers"]
-  s.email       = ["public@misuse.org", "jon@rcode5.com"]
+  s.email       = ["science@misuse.org", "jon@rcode5.com"]
   s.homepage    = "http://github.com/rcode5/mojo_magick"
   s.summary     = "mojo_magick-#{MojoMagick::VERSION}"
   s.description = %q{Simple Ruby stateless module interface to imagemagick.}
