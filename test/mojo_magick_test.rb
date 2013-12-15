@@ -190,6 +190,33 @@ class MojoMagickTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_bad_command
+    begin
+      MojoMagick::convert do |c|
+        c.unknown_option 'fail'
+        c.file 'boogabooga.whatever'
+      end
+    rescue MojoMagick::MojoFailed => ex
+      assert ex.message.include?('unrecognized option'), "Unable to find ImageMagick commandline error in the message"
+      assert ex.message.include?('convert.c/ConvertImageCommand'), "Unable to find ImageMagick commandline error in the message"
+    end
+  end
+    
+  def test_blob
+    reset_images
+    
+    # RGB8 test
+    data = (16.times.map { [(rand > 0.5) ? 0 : 255]*3 }).flatten
+    bdata = data.pack 'C'*data.size
+    out = 'out.png'
+    MojoMagick::convert(nil, "png:#{out}") do |c|
+      c.blob bdata, :format => :rgb, :depth => 8, :size => '4x4'
+    end
+    r = MojoMagick::get_image_size(out)
+    assert r[:height] == 4
+    assert r[:width] == 4
+  end
+
   def test_command_helpers
     reset_images
     test_image = File::join(@working_path, '5742.jpg')

@@ -113,7 +113,7 @@ class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
     b.blob 'binary data'
     filename = b.to_s
     File.open(filename, 'rb') do |f|
-      assert_equal f.read, 'binary data'
+      assert_equal 'binary data', f.read
     end
 
     #label for text should use 'label:"the string"' if specified

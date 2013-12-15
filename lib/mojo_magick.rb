@@ -1,4 +1,5 @@
 cwd = File::dirname(__FILE__)
+require 'open3'
 initializers_dir = File::expand_path(File::join(cwd, 'initializers'))
 Dir.glob(File::join(initializers_dir, '*.rb')).each { |f| require f }
 require File::join(cwd, 'mojo_magick/util/parser')
@@ -75,17 +76,19 @@ module MojoMagick
 
   def MojoMagick::raw_command(command, args, options = {})
     # this suppress error messages to the console
-    err_pipe = windows? ? "2>nul" : "2>/dev/null"
+    # err_pipe = windows? ? "2>nul" : "2>/dev/null"
+    out = outerr = status = nil
     begin
-      execute = "#{command} #{get_limits_as_params} #{args} #{err_pipe}"
-      retval = `#{execute}`
-    # guarantee that only MojoError exceptions are raised here
+      execute = "#{command} #{get_limits_as_params} #{args}"
+      out, outerr, status = Open3.capture3(execute)
+      retval = out
+      # guarantee that only MojoError exceptions are raised here
     rescue Exception => e
       raise MojoError, "#{e.class}: #{e.message}"
     end
-    if $? && !$?.success?
+    if !status.success?
       err_msg = options[:err_msg] || "MojoMagick command failed: #{command}."
-      raise(MojoFailed, "#{err_msg} (Exit status: #{$?.exitstatus})\n  Command: #{execute}")
+      raise(MojoFailed, "#{err_msg} (Exit status: #{$?.exitstatus})\n  Command: #{execute}\n  Error: #{outerr}")
     end
     retval
   end
@@ -166,7 +169,6 @@ module MojoMagick
     raw_command('mogrify', opts.to_s)
   end
 
-
   def MojoMagick::tempfile(*opts)
     begin
       data = opts[0]
@@ -178,9 +180,9 @@ module MojoMagick
       file.path
     rescue Exception => ex
       raise
+    ensure
+      file.close
     end
-  ensure
-    file.close
   end
 
 end # MojoMagick
