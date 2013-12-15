@@ -184,6 +184,10 @@ Availablility
 
 Recent Changes
 ==============
+#### Version 0.5.4
+
+* Include image magick commandline failure from raw_command (on failure)
+* moved to Popen3
 
 #### Version 0.5.1
 
