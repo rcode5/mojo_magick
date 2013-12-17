@@ -182,12 +182,29 @@ Availablility
  * [Github Repo](http://github.com/rcode5/mojo_magick) This is the current canonical branch.
  * Issues/Pull Requests can be submitted through the above repository.
 
+Contributions
+=============
+
+Got a fix?  Got a feature?  
+
+* fork it
+* make a branch (named appropriately)
+* write your code
+* write your tests
+* test it 
+* submit a pull request
+
+Note: please don't change the version.  We'll do that when we merge
+in the new code
+
 Recent Changes
 ==============
 #### Version 0.5.4
 
 * Include image magick commandline failure from raw_command (on failure)
 * moved to Popen3
+* added checks for Popen3 on windows
+* updated README to include info about submissions
 
 #### Version 0.5.1
 
