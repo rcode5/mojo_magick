@@ -88,7 +88,8 @@ module MojoMagick
     end
     if !status.success?
       err_msg = options[:err_msg] || "MojoMagick command failed: #{command}."
-      raise(MojoFailed, "#{err_msg} (Exit status: #{$?.exitstatus})\n  Command: #{execute}\n  Error: #{outerr}")
+      exit_status = $? ? $?.exitstatus : "Unknown"
+      raise(MojoFailed, "#{err_msg} (Exit status: #{exit_status})\n  Command: #{execute}\n  Error: #{outerr}")
     end
     retval
   end
