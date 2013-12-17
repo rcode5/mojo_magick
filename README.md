@@ -176,6 +176,17 @@ Note: Use with care.  If you don't have fonts installed ImageMagick can spin off
       c.composite
     end
 
+Dependencies
+============
+
+This library has (in the past) been good for ruby 1.8.7 and beyond.
+Recent mods (as of 0.5.x) will require a more recent ruby (>1.9.3).
+
+If you're running on 1.8.7, you should be able to safely use 0.4.3
+
+Do this by pinning it in your Gemfile
+
+    gem 'mojo_magick', '0.4.3'
 
 Availablility
 =============
@@ -191,7 +202,7 @@ Got a fix?  Got a feature?
 * make a branch (named appropriately)
 * write your code
 * write your tests
-* test it 
+* test it (`rake` will run the tests)
 * submit a pull request
 
 Note: please don't change the version.  We'll do that when we merge
@@ -205,6 +216,7 @@ Recent Changes
 * moved to Popen3
 * added checks for Popen3 on windows
 * updated README to include info about submissions
+* probably no good for ruby 1.8.7 anymore
 
 #### Version 0.5.1
 
