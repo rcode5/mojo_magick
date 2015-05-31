@@ -3,6 +3,8 @@ require 'open3'
 initializers_dir = File::expand_path(File::join(cwd, 'initializers'))
 Dir.glob(File::join(initializers_dir, '*.rb')).each { |f| require f }
 require File::join(cwd, 'mojo_magick/util/parser')
+require File::join(cwd, 'mojo_magick/errors')
+require File::join(cwd, 'mojo_magick/command_status')
 require File::join(cwd, 'image_magick/resource_limits')
 require File::join(cwd, 'image_magick/fonts')
 require File::join(cwd, 'mojo_magick/opt_builder')
@@ -61,10 +63,6 @@ require 'tempfile'
 #
 module MojoMagick
 
-  class MojoMagickException < StandardError; end
-  class MojoError < MojoMagickException; end
-  class MojoFailed < MojoMagickException; end
-
   # enable resource limiting functionality
   extend ImageMagick::ResourceLimits
   extend ImageMagick::Fonts
@@ -74,24 +72,31 @@ module MojoMagick
     !(RUBY_PLATFORM =~ /win32/).nil?
   end
 
-  def MojoMagick::raw_command(command, args, options = {})
+  def MojoMagick::execute(command, args, options = {})
     # this suppress error messages to the console
     # err_pipe = windows? ? "2>nul" : "2>/dev/null"
-    out = outerr = status = nil
     begin
       execute = "#{command} #{get_limits_as_params} #{args}"
       out, outerr, status = Open3.capture3(execute)
-      retval = out
-      # guarantee that only MojoError exceptions are raised here
+      CommandStatus.new execute, out, outerr, status
     rescue Exception => e
       raise MojoError, "#{e.class}: #{e.message}"
     end
-    if !status.success?
+  end
+  
+  def MojoMagick::execute!(command, args, options = {})
+    # this suppress error messages to the console
+    # err_pipe = windows? ? "2>nul" : "2>/dev/null"
+    status = execute(command, args, options)
+    if !status.success? 
       err_msg = options[:err_msg] || "MojoMagick command failed: #{command}."
-      exit_status = $? ? $?.exitstatus : "Unknown"
-      raise(MojoFailed, "#{err_msg} (Exit status: #{exit_status})\n  Command: #{execute}\n  Error: #{outerr}")
+      raise(MojoFailed, "#{err_msg} (Exit status: #{status.exit_code})\n  Command: #{status.command}\n  Error: #{status.error}")
     end
-    retval
+    status.return_value
+  end
+  
+  def MojoMagick::raw_command(*args)
+    self.execute! *args
   end
 
   def MojoMagick::shrink(source_file, dest_file, options)

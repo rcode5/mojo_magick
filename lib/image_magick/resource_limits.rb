@@ -67,9 +67,11 @@ module ImageMagick
       def parse_limits(options)
         show_actual_values = options[:show_actual_values]
         if options[:get_current_limits]
-          raw_limits = self.raw_command('identify', '-list resource')
+          status = self.execute('identify', '-list resource')
+          raw_limits = status.return_value
         else
-          # we run a raw shell command here to obtain limits without applying command line limit params
+          # we run a raw shell command here to obtain
+          # limits without applying command line limit params
           raw_limits = `identify -list resource`
         end
         actual_values, readable_values = parser.parse_limits(raw_limits)
