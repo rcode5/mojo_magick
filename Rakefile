@@ -13,6 +13,7 @@ task :test do
   end
 end
 
+desc "Build gem"
 task :build do
   `rm mojo_magick-*.gem`
   puts `gem build mojo_magick.gemspec`  

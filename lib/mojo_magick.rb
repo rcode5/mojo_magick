@@ -146,11 +146,15 @@ module MojoMagick
     Font.all
   end
 
+  def MojoMagick::get_format(source_file, format_string)
+    retval = raw_command("identify", "-format \"#{format_string}\" \"#{source_file}\"")
+  end
+    
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})
   # raises MojoFailed when results are indeterminate (width and height could not be determined)
   def MojoMagick::get_image_size(source_file)
     # returns width, height of image if available, nil if not
-    retval = raw_command("identify", "-format \"w:%w h:%h\" \"#{source_file}\"")
+    retval = self.get_format(source_file, %q|w:%w h:%h|)
     return {} if !retval
     width = retval.match(%r{w:([0-9]+) })
     width = width ? width[1].to_i : nil
