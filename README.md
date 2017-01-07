@@ -10,6 +10,7 @@ This tool came about because I wanted a fast, simple, lightweight, nothing-goes-
 because-it's-too-simple-to-break image tool.
 
 [![Gem Version](https://badge.fury.io/rb/mojo_magick.png)](http://badge.fury.io/rb/mojo_magick)
+[![Build Status](https://circleci.com/gh/rcode5/mojo_magick.svg?style=shield&circle-token=8d2252bd460bf1a7cdaad5c2e169698605afb981)
 
 Using it
 ========
