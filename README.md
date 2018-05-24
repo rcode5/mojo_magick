@@ -18,11 +18,11 @@ Using it
 Add to your Gemfile
 
     gem 'mojo_magick'
-    
+
 Require it in your ruby code
 
     require 'mojo_magick'
-    
+
 Go to town! Check out a couple of simple [examples, here](examples/)
 
 Examples
@@ -197,7 +197,7 @@ Availablility
 Contributions
 =============
 
-Got a fix?  Got a feature?  
+Got a fix?  Got a feature?
 
 * fork it
 * make a branch (named appropriately)
@@ -211,6 +211,19 @@ in the new code
 
 Recent Changes
 ==============
+#### Version 0.6.0
+
+* general cleanup and update gems - ready for ImageMagick 7
+* dumped resource limit handling
+
+#### Version 0.5.6
+
+*  add `get_format` method to help with quoted source file
+
+#### Version 0.5.5
+
+*  Refactor raw_command into execute! and execute methods so that for cases where we don't care about exit status, it can be easily ignored
+
 #### Version 0.5.4
 
 * Include image magick commandline failure from raw_command (on failure)

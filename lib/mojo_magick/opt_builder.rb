@@ -17,9 +17,7 @@ module MojoMagick
 
     # Add files to command line, formatted if necessary
     def file(*args)
-      args.each do |arg|
-        add_formatted arg
-      end
+      @opts << args
       self
     end
     alias files file
@@ -30,20 +28,16 @@ module MojoMagick
 
     # annotate takes non-standard args
     def annotate(*args)
-      @opts << '-annotate'
+      @opts << "-annotate"
       arguments = args.join.split
-      arguments.unshift '0' if arguments.length == 1
-      arguments.each do |arg|
-        add_formatted arg
-      end
+      arguments.unshift "0" if arguments.length == 1
+      @opts << arguments
     end
 
     # Create a temporary file for the given image and add to command line
     def format(*args)
-      @opts << '-format'
-      args.each do |arg|
-        add_formatted arg
-      end
+      @opts << "-format"
+      @opts << args
     end
 
     def blob(*args)
@@ -65,32 +59,29 @@ module MojoMagick
 
     # Generic commands. Arguments will be formatted if necessary
     def method_missing(command, *args)
-      @opts << if command.to_s[-1, 1] == '!'
+      @opts << if command.to_s[-1, 1] == "!"
                  "+#{command.to_s.chop}"
                else
                  "-#{command}"
                end
-      args.each do |arg|
-        add_formatted arg
-      end
+      @opts << args
       self
     end
 
     def to_s
-      @opts.join ' '
+      to_a.join " "
+    end
+
+    def to_a
+      @opts.flatten
     end
 
     protected
 
-    def add_formatted(arg)
-      # Quote anything that would cause problems on *nix or windows
-      @opts << quoted_arg(arg)
-    end
-
     def quoted_arg(arg)
-      return arg unless arg =~ /[#'<>^|&();` ]/
+      return arg unless /[#'<>^|&();` ]/.match?(arg)
 
-      ['"', arg.gsub('"', '\"').gsub("'", "\'"), '"'].join
+      ['"', arg.gsub('"', '\"').tr("'", "\'"), '"'].join
     end
   end
 end

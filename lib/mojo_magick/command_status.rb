@@ -5,7 +5,7 @@ module MojoMagick
     end
 
     def exit_code
-      system_status.exitstatus || 'unknown'
+      system_status.exitstatus || "unknown"
     end
   end
 end
