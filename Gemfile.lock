@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mojo_magick (0.5.5)
+    mojo_magick (0.5.6)
 
 GEM
   remote: https://rubygems.org/
@@ -24,3 +24,6 @@ DEPENDENCIES
   rake
   rspec-expectations
   simplecov
+
+BUNDLED WITH
+   1.16.0
