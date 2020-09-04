@@ -3,7 +3,7 @@
 
 require 'mojo_magick'
 
-MojoMagick::convert(nil, 'animated.gif') do |c|
+MojoMagick.convert(nil, 'animated.gif') do |c|
   c.size '200x200'
   c.delay 100
   c.image_block do # first layer
@@ -19,4 +19,3 @@ MojoMagick::convert(nil, 'animated.gif') do |c|
     c.label 'SE'
   end
 end
-
