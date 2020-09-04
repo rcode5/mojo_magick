@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class ResourceLimitsTest < MiniTest::Unit::TestCase
+class ResourceLimitsTest < MiniTest::Test
   def setup
     @orig_limits = MojoMagick.get_default_limits
   end
@@ -32,7 +32,7 @@ class ResourceLimitsTest < MiniTest::Unit::TestCase
     assert_equal @orig_limits[:area], new_limits[:area]
   end
 
-  def test_set_limits
+  def test_set_limits_again
     # set memory to 64 mb, disk to 0 and
     MojoMagick.set_limits(memory: '64mb', disk: '0b')
     new_limits = MojoMagick.get_current_limits(show_actual_values: true)

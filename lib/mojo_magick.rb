@@ -66,7 +66,6 @@ module MojoMagick
   extend ImageMagick::Fonts
 
   def self.windows?
-    mem_fix = 1
     !(RUBY_PLATFORM =~ /win32/).nil?
   end
 
@@ -114,7 +113,6 @@ module MojoMagick
   #   :scale => pass scale options such as ">" to force shrink scaling only or "!" to force absolute width/height scaling (do not preserve aspect ratio)
   #   :percent => scale image to this percentage (do not specify :width/:height in this case)
   def self.resize(source_file, dest_file, options)
-    retval = nil
     scale_options = []
     scale_options << '>' unless options[:shrink_only].nil?
     scale_options << '<' unless options[:expand_only].nil?
@@ -134,7 +132,7 @@ module MojoMagick
       extras << '-gravity Center'
       extras << "-extent #{geometry}"
     end
-    retval = raw_command('convert', "\"#{source_file}\" -resize \"#{geometry}#{scale_options}\" #{extras.join(' ')} \"#{dest_file}\"")
+    raw_command('convert', "\"#{source_file}\" -resize \"#{geometry}#{scale_options}\" #{extras.join(' ')} \"#{dest_file}\"")
     dest_file
   end
 
@@ -144,7 +142,7 @@ module MojoMagick
   end
 
   def self.get_format(source_file, format_string)
-    retval = raw_command('identify', "-format \"#{format_string}\" \"#{source_file}\"")
+    raw_command('identify', "-format \"#{format_string}\" \"#{source_file}\"")
   end
 
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})
@@ -186,8 +184,6 @@ module MojoMagick
     file.binmode
     file.write(data)
     file.path
-  rescue Exception => e
-    raise
   ensure
     file.close
   end

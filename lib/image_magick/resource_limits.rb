@@ -21,7 +21,6 @@ module ImageMagick
     #   # set memory to 32mb, map to 64mb and disk to 0
     #   MiniMagick::Image::set_limit(:memory => 32, 'map' => 64, 'disk' => 0)
     def set_limits(options)
-      mem_fix = 1
       options.each do |resource, value|
         @@resource_limits[resource.to_s.downcase.to_sym] = value.to_s
       end
@@ -29,7 +28,6 @@ module ImageMagick
 
     # remove a limit
     def remove_limits(*options)
-      mem_fix = 1
       @@resource_limits.delete_if do |resource, _value|
         idx = options.index(resource)
         resource == options.values_at(idx)[0].to_s.downcase.to_sym if idx
@@ -38,7 +36,6 @@ module ImageMagick
 
     # remove limits from resources
     def unset_limits(options = {})
-      mem_fix = 1
       @@resource_limits = {}
       if options[:unset_env]
         ENV['MAGICK_AREA_LIMIT'] = nil
@@ -52,13 +49,11 @@ module ImageMagick
     # options:
     #   :show_actual_values => true (default false) - will return integers instead of readable values
     def get_default_limits(options = {})
-      mem_fix = 1
       parse_limits(options.merge(get_current_limits: false))
     end
 
     # returns the limits that imagemagick is running based on any "set_limits" calls
     def get_current_limits(options = {})
-      mem_fix = 1
       parse_limits(options.merge(get_current_limits: true))
     end
 

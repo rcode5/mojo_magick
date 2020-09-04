@@ -4,7 +4,6 @@ module MojoMagick
       # handle parsing outputs from ImageMagick commands
 
       def parse_fonts(raw_fonts)
-        font = nil
         fonts = {}
         enumerator = raw_fonts.split(/\n/).each
         name = nil
@@ -18,7 +17,7 @@ module MojoMagick
             key_val = line.split(/:/).map(&:strip)
             k = key_val[0].downcase.to_sym
             v = key_val[1]
-            fonts[name][k] = key_val[1] if k && name
+            fonts[name][k] = v if k && name
           end
         end
         fonts.values.map { |f| MojoMagick::Font.new f}

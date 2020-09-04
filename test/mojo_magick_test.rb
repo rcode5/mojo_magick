@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class MojoMagickTest < MiniTest::Unit::TestCase
+class MojoMagickTest < MiniTest::Test
   # we keep a fixtures path and a working path so that we can easily test image
   # manipulation routines without tainting the original images
   def setup
@@ -95,7 +95,6 @@ class MojoMagickTest < MiniTest::Unit::TestCase
   def test_expand_with_small_dim
     # image shouldn't resize if we specify small dimensions and expand_only
     reset_images
-    orig_image_size = File.size(@test_image)
     retval = MojoMagick.expand(@test_image, @test_image, {width: 10, height: 10})
     assert_equal @test_image, retval
     new_dimensions = MojoMagick.get_image_size(@test_image)

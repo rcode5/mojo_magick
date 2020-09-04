@@ -15,7 +15,7 @@ IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
       glyphs: /Library/Fonts/Zapfino.ttf
 EOF
 
-class FontTest < MiniTest::Unit::TestCase
+class FontTest < MiniTest::Test
   def test_font
     f = MojoMagick::Font.new
     assert_nil f.name

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class FontsTest < MiniTest::Unit::TestCase
+class FontsTest < MiniTest::Test
   def test_get_fonts
     fonts = MojoMagick.get_fonts
     assert fonts.is_a? Array

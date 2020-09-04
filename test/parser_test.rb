@@ -1,25 +1,25 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
 IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
-  
+
   Font: Zapf-Dingbats
       family: Zapf Dingbats
       style: Normal
       stretch: Normal
       weight: 400
       glyphs: /System/Library/Fonts/ZapfDingbats.ttf
-  
+
     Font: Zapfino
       family: Zapfino
       style: Italic
       stretch: Normal
       weight: 400
       glyphs: /Library/Fonts/Zapfino.ttf
-  
-  
+
+
 EOF
 
-class ParserTest < MiniTest::Unit::TestCase
+class ParserTest < MiniTest::Test
   def test_parse_fonts
     parser = MojoMagick::Util::Parser.new
     parsed_fonts = parser.parse_fonts(IDENTIFY_FONT_RESPONSE)

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
+class MojoMagickOptBuilderTest < MiniTest::Test
   # These tests make the assumption that if we call #raw_command with the
   # correct strings, ImageMagick itself will operate correctly. We're only
   # verifying that the option builder produces the correct strings
