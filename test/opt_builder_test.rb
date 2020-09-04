@@ -1,7 +1,6 @@
-require File::join(File::dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), 'test_helper')
 
-class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
-
+class MojoMagickOptBuilderTest < MiniTest::Test
   # These tests make the assumption that if we call #raw_command with the
   # correct strings, ImageMagick itself will operate correctly. We're only
   # verifying that the option builder produces the correct strings
@@ -12,7 +11,7 @@ class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
 
   def test_annotate
     @builder.annotate 'blah'
-    assert_equal  '-annotate 0 blah', @builder.to_s
+    assert_equal '-annotate 0 blah', @builder.to_s
   end
 
   def test_annotate_with_escapeable_string
@@ -37,7 +36,7 @@ class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
     assert_equal '\( -background red \) \( -background blue \)', b.to_s
   end
 
-  def test_option_builder_with_hex_colors 
+  def test_option_builder_with_hex_colors
     b = MojoMagick::OptBuilder.new
     b.background '#000000'
     assert_equal '-background "#000000"', b.to_s
@@ -69,7 +68,7 @@ class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
 
     # Treats an array of raw data as different arguments
     b = MojoMagick::OptBuilder.new
-    b << ['leave this data','alone']
+    b << ['leave this data', 'alone']
     assert_equal 'leave this data alone', b.to_s
 
     # String includes command arguments
@@ -116,17 +115,15 @@ class MojoMagickOptBuilderTest < MiniTest::Unit::TestCase
       assert_equal 'binary data', f.read
     end
 
-    #label for text should use 'label:"the string"' if specified
-    [[ 'mylabel', 'mylabel' ],
-     [ 'my " label', '"my \" label"' ],
-     [ 'Rock it, cuz i said so!', '"Rock it, cuz i said so!"'],
-     [ "it's like this", '"it\'s like this"'],
-     [ '#$%^&*', '"#$%^&*"']].each do |labels|
-
+    # label for text should use 'label:"the string"' if specified
+    [%w[mylabel mylabel],
+     ['my " label', '"my \" label"'],
+     ['Rock it, cuz i said so!', '"Rock it, cuz i said so!"'],
+     ["it's like this", '"it\'s like this"'],
+     ['#$%^&*', '"#$%^&*"']].each do |labels|
       b = MojoMagick::OptBuilder.new
       b.label labels[0]
       assert_equal "label:#{labels[1]}", b.to_s
     end
-
   end
 end

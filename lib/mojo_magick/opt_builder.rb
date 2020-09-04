@@ -32,9 +32,7 @@ module MojoMagick
     def annotate(*args)
       @opts << '-annotate'
       arguments = args.join.split
-      if arguments.length == 1
-        arguments.unshift '0'
-      end
+      arguments.unshift '0' if arguments.length == 1
       arguments.each do |arg|
         add_formatted arg
       end
@@ -51,10 +49,10 @@ module MojoMagick
     def blob(*args)
       data = args[0]
       opts = args[1] || {}
-      opts.each do |k,v|
-        send(k.to_s,v.to_s)
+      opts.each do |k, v|
+        send(k.to_s, v.to_s)
       end
-      tmpfile = MojoMagick::tempfile(data, opts)
+      tmpfile = MojoMagick.tempfile(data, opts)
       file tmpfile
     end
 
@@ -67,11 +65,11 @@ module MojoMagick
 
     # Generic commands. Arguments will be formatted if necessary
     def method_missing(command, *args)
-      if command.to_s[-1, 1] == '!'
-        @opts << "+#{command.to_s.chop}"
-      else
-        @opts << "-#{command}"
-      end
+      @opts << if command.to_s[-1, 1] == '!'
+                 "+#{command.to_s.chop}"
+               else
+                 "-#{command}"
+               end
       args.each do |arg|
         add_formatted arg
       end
@@ -83,6 +81,7 @@ module MojoMagick
     end
 
     protected
+
     def add_formatted(arg)
       # Quote anything that would cause problems on *nix or windows
       @opts << quoted_arg(arg)
@@ -90,7 +89,8 @@ module MojoMagick
 
     def quoted_arg(arg)
       return arg unless arg =~ /[#'<>^|&();` ]/
-      [ '"', arg.gsub('"', '\"').gsub("'", "\'"), '"'].join
+
+      ['"', arg.gsub('"', '\"').gsub("'", "\'"), '"'].join
     end
   end
 end

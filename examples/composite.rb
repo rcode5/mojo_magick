@@ -3,7 +3,7 @@
 
 require 'mojo_magick'
 
-MojoMagick::convert(nil, 'composite_out.png') do |c|
+MojoMagick.convert(nil, 'composite_out.png') do |c|
   c.size '200x200'
   c.delay 100
   c.image_block do # first layer
@@ -20,4 +20,3 @@ MojoMagick::convert(nil, 'composite_out.png') do |c|
   end
   c.composite
 end
-
