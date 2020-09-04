@@ -10,7 +10,7 @@ class MojoMagickTest < MiniTest::Unit::TestCase
   end
 
   def reset_images
-    FileUtils::rm_r(@working_path) if File::exists?(@working_path)
+    FileUtils::rm_r(@working_path) if File::exist?(@working_path)
     FileUtils::mkdir(@working_path)
     Dir::glob(File::join(@fixtures_path, '*')).each do |file|
       FileUtils::cp(file, @working_path) if File::file?(file)
@@ -201,10 +201,10 @@ class MojoMagickTest < MiniTest::Unit::TestCase
       assert ex.message.include?('convert.c/ConvertImageCommand'), "Unable to find ImageMagick commandline error in the message"
     end
   end
-    
+
   def test_blob
     reset_images
-    
+
     # RGB8 test
     data = (16.times.map { [(rand > 0.5) ? 0 : 255]*3 }).flatten
     bdata = data.pack 'C'*data.size

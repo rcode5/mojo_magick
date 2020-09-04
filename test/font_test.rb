@@ -1,4 +1,3 @@
-
 require File::join(File::dirname(__FILE__), 'test_helper')
 
 IDENTIFY_FONT_RESPONSE =<<EOF
@@ -20,7 +19,7 @@ class FontTest < MiniTest::Unit::TestCase
 
   def test_font
     f = MojoMagick::Font.new
-    assert_equal f.name, nil
+    assert_nil f.name
     assert_equal f.valid?, false
 
     f = MojoMagick::Font.new(:name => "Zapfino", :weight => 400)
@@ -31,5 +30,3 @@ class FontTest < MiniTest::Unit::TestCase
   end
 
 end
-
-
