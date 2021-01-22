@@ -15,3 +15,8 @@ task :build do
   `rm mojo_magick-*.gem`
   puts `gem build mojo_magick.gemspec`
 end
+
+desc "Release"
+task release: :build do
+  puts `gem push mojo_magick-*.gem`
+end
