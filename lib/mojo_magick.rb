@@ -68,19 +68,14 @@ module MojoMagick
   end
 
   def self.execute(command, *args)
-    # this suppress error messages to the console
-    # err_pipe = windows? ? "2>nul" : "2>/dev/null"
-
     execute = "#{command} #{args}"
-    out, outerr, status = Open3.capture3(command, *args)
+    out, outerr, status = Open3.capture3(command, *args.map(&:to_s))
     CommandStatus.new execute, out, outerr, status
   rescue Exception => e
     raise MojoError, "#{e.class}: #{e.message}"
   end
 
   def self.execute!(command, *args)
-    # this suppress error messages to the console
-    # err_pipe = windows? ? "2>nul" : "2>/dev/null"
     status = execute(command, *args)
     unless status.success?
       err_msg = "MojoMagick command failed: #{command}."

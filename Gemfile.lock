@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mojo_magick (0.6.1)
+    mojo_magick (0.6.0)
 
 GEM
   remote: https://rubygems.org/
