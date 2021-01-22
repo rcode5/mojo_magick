@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require_relative "test_helper"
 
-IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
+IDENTIFY_FONT_RESPONSE = <<~EO_FONTS
   Font: Zapf-Dingbats
       family: Zapf Dingbats
       style: Normal
@@ -13,7 +13,7 @@ IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
       stretch: Normal
       weight: 400
       glyphs: /Library/Fonts/Zapfino.ttf
-EOF
+EO_FONTS
 
 class FontTest < MiniTest::Test
   def test_font
@@ -21,8 +21,8 @@ class FontTest < MiniTest::Test
     assert_nil f.name
     assert_equal f.valid?, false
 
-    f = MojoMagick::Font.new(name: 'Zapfino', weight: 400)
-    assert_equal f.name, 'Zapfino'
+    f = MojoMagick::Font.new(name: "Zapfino", weight: 400)
+    assert_equal f.name, "Zapfino"
     assert_equal f.valid?, true
     assert_equal f.weight, 400
   end

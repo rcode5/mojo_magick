@@ -1,12 +1,16 @@
-require 'rubygems'
-require 'rake/testtask'
+require "rubygems"
+require "simplecov"
+require "rake/testtask"
 
-task default: 'test'
-Rake::TestTask.new do |task|
-  task.pattern = 'test/*_test.rb'
+task default: [:test]
+
+Rake::TestTask.new do |t|
+  t.libs = ["minitest"]
+  t.test_files = Dir.glob(File.join(File.dirname(__FILE__), "test/*_test.rb"))
+  t.verbose = true
 end
 
-desc 'Build gem'
+desc "Build gem"
 task :build do
   `rm mojo_magick-*.gem`
   puts `gem build mojo_magick.gemspec`

@@ -1,0 +1,33 @@
+# Request and system specs by definition do not test specific classes/modules,
+# so they are excluded from following the `describe ClassOrModule` rule.
+RSpec/DescribeClass:
+  Exclude:
+    - "spec/features/**/*"
+    - "spec/requests/**/*"
+    - "spec/system/**/*"
+
+# Prefer short examples but allow some flexibility (up to 12 lines). System
+# specs are excluded from this cop because they often involve many sequential
+# steps, and forcing these to be shorter can make them harder to follow.
+RSpec/ExampleLength:
+  Max: 12 # Default is 5
+  Exclude:
+    - "spec/features/**/*"
+    - "spec/system/**/*"
+
+# If an `it` block does not have a description (i.e. the example relies on
+# RSpec magic to infer the description), then prefer it use the `is_expected`
+# syntax instead of `expect(subject)`, like this:
+# it { is_expected.to be_truthy }
+RSpec/ImplicitSubject:
+  EnforcedStyle: single_statement_only
+
+# Ideal BDD is to have one `expect` per example (so that each specification can
+# have corresponding documentation in the form of an `it` block), but we allow
+# some flexibility (up to 3). System specs are often long capybara flows with
+# many expectations, so we exclude them from this cop.
+RSpec/MultipleExpectations:
+  Max: 3 # Default is 1
+  Exclude:
+    - "spec/features/**/*"
+    - "spec/system/**/*"

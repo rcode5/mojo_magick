@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require_relative "test_helper"
 
-IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
+IDENTIFY_FONT_RESPONSE = <<~EOFONT
 
   Font: Zapf-Dingbats
       family: Zapf Dingbats
@@ -17,13 +17,13 @@ IDENTIFY_FONT_RESPONSE = <<~EOF.freeze
       glyphs: /Library/Fonts/Zapfino.ttf
 
 
-EOF
+EOFONT
 
 class ParserTest < MiniTest::Test
   def test_parse_fonts
     parser = MojoMagick::Util::Parser.new
     parsed_fonts = parser.parse_fonts(IDENTIFY_FONT_RESPONSE)
     assert_equal parsed_fonts.length, 2
-    assert_equal parsed_fonts[1].style, 'Italic'
+    assert_equal parsed_fonts[1].style, "Italic"
   end
 end
