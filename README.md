@@ -211,11 +211,11 @@ in the new code
 
 Recent Changes
 ==============
-#### Version 0.6.1
+#### Version 0.6.0
 
 * general cleanup and update gems - ready for ImageMagick 7
 * dumped resource limit handling
-* PR #29
+* PR #29, #30
 
 #### Version 0.5.6
 
