@@ -24,6 +24,16 @@ class MojoMagickOptBuilderTest < MiniTest::Test
     assert_equal %w[-annotate 5 it's], @builder.to_a
   end
 
+  def test_annotate_with_full_args
+    @builder.annotate "this thing", geometry: 3
+    assert_equal ["-annotate", "3", "this thing"], @builder.to_a
+  end
+
+  def test_annotate_with_full_array_args
+    @builder.annotate "this", "thing", geometry: 3
+    assert_equal ["-annotate", "3", "thisthing"], @builder.to_a
+  end
+
   def test_option_builder_with_blocks
     # Passing in basic commands produces a string
     b = MojoMagick::OptBuilder.new

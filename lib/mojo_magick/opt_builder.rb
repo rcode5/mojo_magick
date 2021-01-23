@@ -27,10 +27,10 @@ module MojoMagick
     end
 
     # annotate takes non-standard args
-    def annotate(*args)
+    def annotate(*args, geometry: 0)
       @opts << "-annotate"
-      arguments = args.join.split
-      arguments.unshift "0" if arguments.length == 1
+      arguments = [args.join]
+      arguments.unshift geometry.to_s
       @opts << arguments
     end
 
