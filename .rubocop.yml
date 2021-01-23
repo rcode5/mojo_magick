@@ -5,6 +5,7 @@ inherit_from:
   - ./.rubocop-common.yml
   - ./.rubocop-performance.yml
 
-Metrics/MethodLength:
-  Exclude:
-    - "**/*test.rb"
+Metrics/CyclomaticComplexity:
+  Max: 10
+Metrics/PerceivedComplexity:
+  Max: 10

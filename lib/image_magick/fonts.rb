@@ -1,15 +1,8 @@
 module ImageMagick
-  module Fonts
-    def get_fonts
-      @parser ||= MojoMagick::Util::Parser.new
-      raw_fonts = begin
-        raw_command("identify", "-list font")
-      rescue Exception => e
-        puts e
-        puts "Failed to execute font list with raw_command - trying straight up execute"
-        `convert -list font`
-      end
-      @parser.parse_fonts(raw_fonts)
+  class Fonts
+    def self.all
+      raw_fonts = MojoMagick::Commands.raw_command("identify", "-list", "font")
+      MojoMagick::Util::FontParser.new(raw_fonts).parse
     end
   end
 end

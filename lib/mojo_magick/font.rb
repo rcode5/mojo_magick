@@ -7,7 +7,6 @@ module MojoMagick
     end
 
     def initialize(property_hash = {})
-      property_hash.symbolize_keys!
       %i[name family style stretch weight glyphs].each do |f|
         setter = "#{f}="
         send(setter, property_hash[f])
@@ -15,7 +14,7 @@ module MojoMagick
     end
 
     def self.all
-      ImageMagick::Font.all.map { |font_info| Font.new(font_info) }
+      ImageMagick::Fonts.all
     end
   end
 end

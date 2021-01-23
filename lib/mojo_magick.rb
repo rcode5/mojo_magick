@@ -1,14 +1,12 @@
-cwd = File.dirname(__FILE__)
-require "open3"
-initializers_dir = File.expand_path(File.join(cwd, "initializers"))
-Dir.glob(File.join(initializers_dir, "*.rb")).sort.each { |f| require f }
-require File.join(cwd, "mojo_magick/util/parser")
-require File.join(cwd, "mojo_magick/errors")
-require File.join(cwd, "mojo_magick/command_status")
-require File.join(cwd, "image_magick/fonts")
-require File.join(cwd, "mojo_magick/opt_builder")
-require File.join(cwd, "mojo_magick/font")
 require "tempfile"
+require "open3"
+require_relative "./mojo_magick/util/font_parser"
+require_relative "./mojo_magick/errors"
+require_relative "./mojo_magick/command_status"
+require_relative "./mojo_magick/commands"
+require_relative "./image_magick/fonts"
+require_relative "./mojo_magick/opt_builder"
+require_relative "./mojo_magick/font"
 
 # MojoMagick is a stateless set of module methods which present a convient interface
 # for accessing common tasks for ImageMagick command line library.
@@ -34,7 +32,7 @@ require "tempfile"
 #
 # Equivalent to:
 #
-#   MojoMagick::raw_command('convert', 'source.jpg -crop 250x250+0+0\
+#   MojoMagick::Commands.raw_command('convert', 'source.jpg -crop 250x250+0+0\
 #         +repage -strip -set comment "my favorite file" dest.jpg')
 #
 # Example #mogrify usage:
@@ -43,7 +41,7 @@ require "tempfile"
 #
 # Equivalent to:
 #
-#   MojoMagick::raw_command('mogrify', '-shave 10x10 image.jpg')
+#   MojoMagick::Commands.raw_command('mogrify', '-shave 10x10 image.jpg')
 #
 # Example showing some additional options:
 #
@@ -60,34 +58,40 @@ require "tempfile"
 # bang (!) can be appended to command names to use the '+' versions
 # instead of '-' versions.
 #
+
+module MojoMagickDeprecations
+  # rubocop:disable Naming/AccessorMethodName
+  def get_fonts
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
+         "  Please use `available_fonts` instead"
+    MojoMagick.available_fonts
+  end
+
+  # rubocop:enable Naming/AccessorMethodName
+  ### Moved to `Commands`
+  def execute!(*args)
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
+         "  Please use `MojoMagick::Commands.execute!` instead"
+    MojoMagick::Commands.send(:execute!, *args)
+  end
+
+  def execute(*args)
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
+         "  Please use `MojoMagick::Commands.execute!` instead"
+    MojoMagick::Commands.send(:execute, *args)
+  end
+
+  def raw_command(*args)
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
+         "  Please use `MojoMagick::Commands.execute!` instead"
+    MojoMagick::Commands.raw_command(*args)
+  end
+end
+
 module MojoMagick
-  extend ImageMagick::Fonts
-
+  extend MojoMagickDeprecations
   def self.windows?
-    !(RUBY_PLATFORM =~ /win32/).nil?
-  end
-
-  def self.execute(command, *args)
-    execute = "#{command} #{args}"
-    out, outerr, status = Open3.capture3(command, *args.map(&:to_s))
-    CommandStatus.new execute, out, outerr, status
-  rescue Exception => e
-    raise MojoError, "#{e.class}: #{e.message}"
-  end
-
-  def self.execute!(command, *args)
-    status = execute(command, *args)
-    unless status.success?
-      err_msg = "MojoMagick command failed: #{command}."
-      raise(MojoFailed, "#{err_msg} (Exit status: #{status.exit_code})\n" +
-            "  Command: #{status.command}\n" +
-            "  Error: #{status.error}")
-    end
-    status.return_value
-  end
-
-  def self.raw_command(*args)
-    execute!(*args)
+    !RUBY_PLATFORM.include(win32)
   end
 
   def self.shrink(source_file, dest_file, options)
@@ -105,35 +109,40 @@ module MojoMagick
   # resizes an image and returns the filename written to
   # options:
   #   :width / :height => scale to these dimensions
-  #   :scale => pass scale options such as ">" to force shrink scaling only or "!" to force absolute width/height scaling (do not preserve aspect ratio)
+  #   :scale => pass scale options such as ">" to force shrink scaling only or
+  #             "!" to force absolute width/height scaling (do not preserve aspect ratio)
   #   :percent => scale image to this percentage (do not specify :width/:height in this case)
   def self.resize(source_file, dest_file, options)
-    scale_options = []
-    scale_options << ">" unless options[:shrink_only].nil?
-    scale_options << "<" unless options[:expand_only].nil?
-    scale_options << "!" unless options[:absolute_aspect].nil?
-    scale_options << "^" unless options[:fill].nil?
-    scale_options = scale_options.join
-
+    scale_options = extract_scale_options(options)
+    geometry = extract_geometry_options(options)
     extras = []
-    if !options[:width].nil? && !options[:height].nil?
-      geometry = "#{options[:width]}X#{options[:height]}"
-    elsif !options[:percent].nil?
-      geometry = "#{options[:percent]}%"
-    else
-      raise MojoMagickError, "Unknown options for method resize: #{options.inspect}"
-    end
     if !options[:fill].nil? && !options[:crop].nil?
       extras << "-gravity"
       extras << "Center"
       extras << "-extent"
       extras << geometry.to_s
     end
-    raw_command("convert",
-                source_file,
-                "-resize", "#{geometry}#{scale_options}",
-                *extras, dest_file)
+    Commands.raw_command("convert",
+                         source_file,
+                         "-resize", "#{geometry}#{scale_options}",
+                         *extras, dest_file)
     dest_file
+  end
+
+  def self.convert(source = nil, dest = nil)
+    opts = OptBuilder.new
+    opts.file source if source
+    yield opts
+    opts.file dest if dest
+
+    Commands.raw_command("convert", *opts.to_a)
+  end
+
+  def self.mogrify(dest = nil)
+    opts = OptBuilder.new
+    yield opts
+    opts.file dest if dest
+    Commands.raw_command("mogrify", *opts.to_a)
   end
 
   def self.available_fonts
@@ -142,7 +151,7 @@ module MojoMagick
   end
 
   def self.get_format(source_file, format_string)
-    raw_command("identify", "-format", format_string, source_file)
+    Commands.raw_command("identify", "-format", format_string, source_file)
   end
 
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})
@@ -161,22 +170,6 @@ module MojoMagick
     { width: width, height: height }
   end
 
-  def self.convert(source = nil, dest = nil)
-    opts = OptBuilder.new
-    opts.file source if source
-    yield opts
-    opts.file dest if dest
-
-    raw_command("convert", *opts.to_a)
-  end
-
-  def self.mogrify(dest = nil)
-    opts = OptBuilder.new
-    yield opts
-    opts.file dest if dest
-    raw_command("mogrify", *opts.to_a)
-  end
-
   def self.tempfile(*opts)
     data = opts[0]
     rest = opts[1]
@@ -187,5 +180,28 @@ module MojoMagick
     file.path
   ensure
     file.close
+  end
+
+  class << self
+    private
+
+    def extract_geometry_options(options)
+      if !options[:width].nil? && !options[:height].nil?
+        "#{options[:width]}X#{options[:height]}"
+      elsif !options[:percent].nil?
+        "#{options[:percent]}%"
+      else
+        raise MojoMagickError, "Resize requires width and height or percentage: #{options.inspect}"
+      end
+    end
+
+    def extract_scale_options(options)
+      [].tap { |scale_options|
+        scale_options << ">" unless options[:shrink_only].nil?
+        scale_options << "<" unless options[:expand_only].nil?
+        scale_options << "!" unless options[:absolute_aspect].nil?
+        scale_options << "^" unless options[:fill].nil?
+      }.join
+    end
   end
 end
