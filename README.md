@@ -211,6 +211,14 @@ in the new code
 
 Recent Changes
 ==============
+#### Version 0.6.2
+
+* fix `annotate` option.  Now it takes keyword arguments for geometry.
+
+#### Version 0.6.1
+
+* pushed and yanked - defunct version
+
 #### Version 0.6.0
 
 * general cleanup and update gems - ready for ImageMagick 7
