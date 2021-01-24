@@ -19,10 +19,10 @@ IDENTIFY_FONT_RESPONSE = <<~EOFONT
 
 EOFONT
 
-class ParserTest < MiniTest::Test
+class FontParserTest < MiniTest::Test
   def test_parse_fonts
-    parser = MojoMagick::Util::Parser.new
-    parsed_fonts = parser.parse_fonts(IDENTIFY_FONT_RESPONSE)
+    parser = MojoMagick::Util::FontParser.new(IDENTIFY_FONT_RESPONSE)
+    parsed_fonts = parser.parse
     assert_equal parsed_fonts.length, 2
     assert_equal parsed_fonts[1].style, "Italic"
   end

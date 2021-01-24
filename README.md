@@ -139,7 +139,7 @@ complex commands.
 
 ### Get a list of available fonts
 
-    fonts = MojoMagick::get_fonts
+    fonts = MojoMagick::available_fonts
 
     fonts.first
     => #<MojoMagick::Font:0x000001015a8b90 @name="AvantGarde-Book", @family="AvantGarde", @style="Normal", @stretch="Normal", @weight="400", @glyphs="/usr/local/share/ghostscript/fonts/a010013l.pfb">

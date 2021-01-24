@@ -30,8 +30,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.add_development_dependency("bundler")
   s.add_development_dependency("bundle-audit")
+  s.add_development_dependency("bundler")
   s.add_development_dependency("minitest")
   s.add_development_dependency("rake")
   s.add_development_dependency("rspec-expectations")

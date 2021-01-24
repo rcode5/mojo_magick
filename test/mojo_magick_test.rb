@@ -6,6 +6,11 @@ class MojoMagickTest < MiniTest::Test
   def setup
     @fixtures_path = File.expand_path(File.join(File.dirname(__FILE__), "fixtures"))
     @working_path = File.join(@fixtures_path, "tmp")
+
+    reset_images
+
+    @test_image = File.join(@working_path, "5742.jpg")
+    @out_image = File.join(@working_path, "out1.jpg")
   end
 
   def reset_images
@@ -14,11 +19,9 @@ class MojoMagickTest < MiniTest::Test
     Dir.glob(File.join(@fixtures_path, "*")).each do |file|
       FileUtils.cp(file, @working_path) if File.file?(file)
     end
-    @test_image = File.join(@working_path, "5742.jpg")
   end
 
   def test_get_image_size
-    reset_images
     orig_image_size = File.size(@test_image)
     retval = MojoMagick.get_image_size(@test_image)
     assert_equal orig_image_size, File.size(@test_image)
@@ -28,7 +31,6 @@ class MojoMagickTest < MiniTest::Test
 
   def test_image_resize
     # test basic resizing
-    reset_images
     orig_image_size = File.size(@test_image)
     size_test_temp = Tempfile.new("mojo_test")
     size_test = size_test_temp.path
@@ -41,16 +43,15 @@ class MojoMagickTest < MiniTest::Test
     assert_equal 67, new_dimensions[:width]
 
     # we should be able to resize image right over itself
-    retval = MojoMagick.resize(@test_image, @test_image, { width: 100, height: 100 })
+    retval = MojoMagick.resize(@test_image, @test_image, { width: 150, height: 150 })
     assert_equal @test_image, retval
     refute_equal orig_image_size, File.size(@test_image)
     new_dimensions = MojoMagick.get_image_size(@test_image)
-    assert_equal 100, new_dimensions[:height]
-    assert_equal 67, new_dimensions[:width]
+    assert_equal 150, new_dimensions[:height]
+    assert_equal 100, new_dimensions[:width]
   end
 
   def test_image_resize_with_percentage
-    reset_images
     original_size = MojoMagick.get_image_size(@test_image)
     retval = MojoMagick.resize(@test_image, @test_image, { percent: 50 })
     assert_equal @test_image, retval
@@ -62,7 +63,6 @@ class MojoMagickTest < MiniTest::Test
 
   def test_shrink_with_big_dimensions
     # image shouldn't resize if we specify very large dimensions and specify "shrink_only"
-    reset_images
     size_test_temp = Tempfile.new("mojo_test")
     size_test = size_test_temp.path
     retval = MojoMagick.shrink(@test_image, size_test, { width: 1000, height: 1000 })
@@ -73,7 +73,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_shrink
-    reset_images
     # image should resize if we specify small dimensions and shrink_only
     retval = MojoMagick.shrink(@test_image, @test_image, { width: 1000, height: 100 })
     assert_equal @test_image, retval
@@ -83,7 +82,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_resize_with_shrink_only_options
-    reset_images
     # image should resize if we specify small dimensions and shrink_only
     retval = MojoMagick.resize(@test_image, @test_image, { shrink_only: true, width: 400, height: 400 })
     assert_equal @test_image, retval
@@ -94,7 +92,6 @@ class MojoMagickTest < MiniTest::Test
 
   def test_expand_with_small_dim
     # image shouldn't resize if we specify small dimensions and expand_only
-    reset_images
     _orig_image_size = File.size(@test_image)
     retval = MojoMagick.expand(@test_image, @test_image, { width: 10, height: 10 })
     assert_equal @test_image, retval
@@ -104,7 +101,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_expand
-    reset_images
     # image should resize if we specify large dimensions and expand_only
     retval = MojoMagick.expand(@test_image, @test_image, { width: 1000, height: 1000 })
     assert_equal @test_image, retval
@@ -125,7 +121,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_resize_with_fill
-    reset_images
     @test_image = File.join(@working_path, "5742.jpg")
     MojoMagick.resize(@test_image, @test_image, { fill: true, width: 100, height: 100 })
     dim = MojoMagick.get_image_size(@test_image)
@@ -134,7 +129,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_resize_with_fill_and_crop
-    reset_images
     @test_image = File.join(@working_path, "5742.jpg")
     MojoMagick.resize(@test_image, @test_image, { fill: true, crop: true, width: 150, height: 120 })
     dim = MojoMagick.get_image_size(@test_image)
@@ -151,7 +145,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_label
-    reset_images
     out_image = File.join(@working_path, "label_test.png")
 
     MojoMagick.convert do |c|
@@ -161,7 +154,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_label_with_quote
-    reset_images
     out_image = File.join(@working_path, "label_test.png")
 
     MojoMagick.convert do |c|
@@ -171,7 +163,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_label_with_apostrophe
-    reset_images
     out_image = File.join(@working_path, "label_test.png")
 
     MojoMagick.convert do |c|
@@ -181,7 +172,6 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_label_with_quotes
-    reset_images
     out_image = File.join(@working_path, "label_test.png")
 
     MojoMagick.convert do |c|
@@ -202,10 +192,7 @@ class MojoMagickTest < MiniTest::Test
            "Unable to find ImageMagick commandline error in the message"
   end
 
-  def test_blob
-    reset_images
-
-    # RGB8 test
+  def test_blob_rgb
     data = (Array.new(16) { [rand > 0.5 ? 0 : 255] * 3 }).flatten
     bdata = data.pack "C" * data.size
     out = "out.png"
@@ -217,48 +204,57 @@ class MojoMagickTest < MiniTest::Test
     assert r[:width] == 4
   end
 
-  def test_command_helpers
-    reset_images
-    test_image = File.join(@working_path, "5742.jpg")
-    out_image = File.join(@working_path, "out1.jpg")
-
-    # Simple convert test
+  def test_convert
     MojoMagick.convert do |c|
-      c.file test_image
+      c.file @test_image
       c.crop "92x64+0+0"
       c.repage!
-      c.file out_image
+      c.file @out_image
     end
-    retval = MojoMagick.get_image_size(out_image)
+    retval = MojoMagick.get_image_size(@out_image)
     assert_equal 92, retval[:width]
     assert_equal 64, retval[:height]
+  end
 
+  def test_mogrify
+    MojoMagick.convert do |c|
+      c.file @test_image
+      c.file @out_image
+    end
     # Simple mogrify test
     MojoMagick.mogrify do |m|
       m.crop "32x32+0+0"
       m.repage!
-      m.file out_image
+      m.file @out_image
     end
-    retval = MojoMagick.get_image_size(out_image)
+    retval = MojoMagick.get_image_size(@out_image)
     assert_equal 32, retval[:width]
     assert_equal 32, retval[:height]
+  end
 
-    # Convert test, using file shortcuts
-    MojoMagick.convert(test_image, out_image) do |c|
+  def test_convert_crop_and_repage
+    MojoMagick.convert(@test_image, @out_image) do |c|
       c.crop "100x100+0+0"
       c.repage!
     end
-    retval = MojoMagick.get_image_size(out_image)
+    retval = MojoMagick.get_image_size(@out_image)
     assert_equal 100, retval[:width]
     assert_equal 100, retval[:height]
+  end
 
-    # Mogrify test, using file shortcut
-    MojoMagick.mogrify(out_image) { |m| m.shave("25x25").repage! }
-    retval = MojoMagick.get_image_size(out_image)
+  def test_mogrify_with_shave_and_repage
+    MojoMagick.convert do |c|
+      c.file @test_image
+      c.crop "100x100+0+0"
+      c.file @out_image
+    end
+    MojoMagick.mogrify(@out_image) { |m| m.shave("25x25").repage! }
+    retval = MojoMagick.get_image_size(@out_image)
     assert_equal 50, retval[:width]
     assert_equal 50, retval[:height]
+  end
 
-    # RGB8 test
+  def test_convert_rgb
     bdata = "aaaaaabbbbbbccc"
     out = "out.png"
     MojoMagick.convert do |c|
@@ -268,7 +264,9 @@ class MojoMagickTest < MiniTest::Test
     r = MojoMagick.get_image_size(out)
     assert r[:height] == 1
     assert r[:width] == 5
+  end
 
+  def test_convert_rgba
     bdata = "1111222233334444"
     out = "out.png"
     MojoMagick.convert do |c|
@@ -278,5 +276,13 @@ class MojoMagickTest < MiniTest::Test
     r = MojoMagick.get_image_size(out)
     assert r[:height] == 1
     assert r[:width] == 4
+  end
+
+  def test_available_fonts
+    fonts = MojoMagick.available_fonts
+    assert fonts.is_a? Array
+    assert fonts.length > 1
+    assert fonts.first.name
+    assert(fonts.first.name.is_a?(String))
   end
 end

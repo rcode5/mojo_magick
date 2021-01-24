@@ -1,28 +1,20 @@
-# rubocop:disable Lint/AssignmentInCondition
+require_relative "./font_parser"
 module MojoMagick
   module Util
     class Parser
-      # handle parsing outputs from ImageMagick commands
+      attr_reader :raw_fonts
 
-      def parse_fonts(raw_fonts)
-        fonts = {}
-        enumerator = raw_fonts.split(/\n/).each
-        name = nil
-        while begin; line = enumerator.next; rescue StopIteration; line = nil; end
-          line.chomp!
-          line = enumerator.next if line.nil? || line.empty? || (/^\s+$/ =~ line)
-          m = /^\s*Font:\s+(.*)$/.match(line)
-          if m
-            name = m[1].strip
-            fonts[name] = { name: name }
-          else
-            key_val = line.split(/:/).map(&:strip)
-            k = key_val[0].downcase.to_sym
-            v = key_val[1]
-            fonts[name][k] = v if k && name
-          end
-        end
-        fonts.values.map { |f| MojoMagick::Font.new f }
+      def initialize
+        warn "DEPRECATION WARNING: This class has been deprecated and will be removed with"\
+             " the next minor version release."\
+             "  Please use `MojoMagick::Util::FontParser` instead"
+      end
+
+      def parse_fonts(fonts)
+        warn "DEPRECATION WARNING: #{__method__} has been deprecated and will be removed with"\
+             " the next minor version release."\
+             "  Please use `MojoMagick::Util::FontParser#parse` instead"
+        FontParser.new(fonts).parse
       end
     end
   end
