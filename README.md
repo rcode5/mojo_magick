@@ -211,6 +211,12 @@ in the new code
 
 Recent Changes
 ==============
+
+#### Version 0.6.4
+
+* Fix issue with `identity -list font` returning exit code 1 on some systems (Ubuntu) with PR #https://github.com/rcode5/mojo_magick/pull/35
+35
+
 #### Version 0.6.3
 
 * Major cleanup and refactor (https://github.com/rcode5/mojo_magick/pull/33)
