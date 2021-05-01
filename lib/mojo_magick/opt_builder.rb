@@ -58,7 +58,7 @@ module MojoMagick
     end
 
     # Generic commands. Arguments will be formatted if necessary
-    # rubocop:disable Lint/MissingSuper, Style/MissingRespondToMissing
+    # rubocop:disable Style/MissingRespondToMissing
     def method_missing(command, *args)
       @opts << if command.to_s[-1, 1] == "!"
                  "+#{command.to_s.chop}"
@@ -69,7 +69,7 @@ module MojoMagick
       self
     end
 
-    # rubocop:enable Lint/MissingSuper, Style/MissingRespondToMissing
+    # rubocop:enable Style/MissingRespondToMissing
     def to_a
       @opts.flatten
     end

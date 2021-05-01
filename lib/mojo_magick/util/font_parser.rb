@@ -10,7 +10,7 @@ module MojoMagick
 
       def parse
         fonts = {}
-        enumerator = raw_fonts.split(/\n/).each
+        enumerator = raw_fonts.split("\n").each
         name = nil
         while begin; line = enumerator.next; rescue StopIteration; line = nil; end
           line.chomp!
@@ -30,7 +30,7 @@ module MojoMagick
       private
 
       def extract_key_value(line)
-        key_val = line.split(/:/).map(&:strip)
+        key_val = line.split(":").map(&:strip)
         [key_val[0].downcase.to_sym, key_val[1]]
       end
 
