@@ -212,6 +212,14 @@ in the new code
 Recent Changes
 ==============
 
+#### Version 0.6.6
+
+* Bundle update
+
+#### Version 0.6.5
+
+* Bundle update
+
 #### Version 0.6.4
 
 * Fix issue with `identity -list font` returning exit code 1 on some systems (Ubuntu) with PR #https://github.com/rcode5/mojo_magick/pull/35
@@ -222,7 +230,7 @@ Recent Changes
 * Major cleanup and refactor (https://github.com/rcode5/mojo_magick/pull/33)
 * Deprecated `MojoMagick.get_fonts` in favor of `MojoMagick.available_fonts`
 * Moved `raw_command` and `execute` and `execute!` methods into their own module (and added deprecation warnings)
-* Renamed `Util::Parser` to `Util::FontParser` because that's what it does 
+* Renamed `Util::Parser` to `Util::FontParser` because that's what it does
 * Overall rubocop and ruby clean up
 
 #### Version 0.6.2
