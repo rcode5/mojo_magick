@@ -212,6 +212,10 @@ in the new code
 Recent Changes
 ==============
 
+#### Version 0.6.7
+
+* Bundle update
+
 #### Version 0.6.6
 
 * Bundle update

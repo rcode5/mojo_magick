@@ -38,4 +38,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rubocop-performance")
 
   s.post_install_message = post_install_message
+  s.metadata["rubygems_mfa_required"] = "true"
 end
