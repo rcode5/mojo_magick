@@ -193,7 +193,7 @@ class MojoMagickTest < MiniTest::Test
   end
 
   def test_blob_rgb
-    data = (Array.new(16) { [rand > 0.5 ? 0 : 255] * 3 }).flatten
+    data = (Array.new(16) { [(rand > 0.5) ? 0 : 255] * 3 }).flatten
     bdata = data.pack "C" * data.size
     out = "out.png"
     MojoMagick.convert(nil, "png:#{out}") do |c|
