@@ -21,9 +21,9 @@ module MojoMagick
         status = execute(command, *args)
         unless status.success?
           err_msg = "MojoMagick command failed: #{command}."
-          raise(MojoFailed, "#{err_msg} (Exit status: #{status.exit_code})\n" \
-                            "  Command: #{status.command}\n" \
-                            "  Error: #{status.error}")
+          raise(MojoFailed, "#{err_msg} (Exit status: #{status.exit_code})\n  " \
+                            "Command: #{status.command}\n  " \
+                            "Error: #{status.error}")
         end
         status.return_value
       end

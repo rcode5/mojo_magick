@@ -62,28 +62,28 @@ require_relative "./mojo_magick/font"
 module MojoMagickDeprecations
   # rubocop:disable Naming/AccessorMethodName
   def get_fonts
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
-         "  Please use `available_fonts` instead"
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
+         "Please use `available_fonts` instead"
     MojoMagick.available_fonts
   end
 
   # rubocop:enable Naming/AccessorMethodName
   ### Moved to `Commands`
   def execute!(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
-         "  Please use `MojoMagick::Commands.execute!` instead"
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
+         "Please use `MojoMagick::Commands.execute!` instead"
     MojoMagick::Commands.send(:execute!, *args)
   end
 
   def execute(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
-         "  Please use `MojoMagick::Commands.execute!` instead"
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
+         "Please use `MojoMagick::Commands.execute!` instead"
     MojoMagick::Commands.send(:execute, *args)
   end
 
   def raw_command(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release."\
-         "  Please use `MojoMagick::Commands.execute!` instead"
+    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
+         "Please use `MojoMagick::Commands.execute!` instead"
     MojoMagick::Commands.raw_command(*args)
   end
 end
