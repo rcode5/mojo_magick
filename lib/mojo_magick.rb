@@ -1,12 +1,12 @@
 require "tempfile"
 require "open3"
-require_relative "./mojo_magick/util/font_parser"
-require_relative "./mojo_magick/errors"
-require_relative "./mojo_magick/command_status"
-require_relative "./mojo_magick/commands"
-require_relative "./image_magick/fonts"
-require_relative "./mojo_magick/opt_builder"
-require_relative "./mojo_magick/font"
+require_relative "mojo_magick/util/font_parser"
+require_relative "mojo_magick/errors"
+require_relative "mojo_magick/command_status"
+require_relative "mojo_magick/commands"
+require_relative "image_magick/fonts"
+require_relative "mojo_magick/opt_builder"
+require_relative "mojo_magick/font"
 
 # MojoMagick is a stateless set of module methods which present a convient interface
 # for accessing common tasks for ImageMagick command line library.
@@ -64,6 +64,7 @@ end
 
 module MojoMagick
   extend MojoMagickDeprecations
+
   def self.windows?
     !RUBY_PLATFORM.include(win32)
   end

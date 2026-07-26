@@ -56,7 +56,7 @@ Metrics/MethodLength:
     - "db/migrate/*"
     - "spec/**/*"
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: false
 
 Security/YAMLLoad:
@@ -84,6 +84,9 @@ Style/ModuleFunction:
   EnforcedStyle: extend_self
 
 Style/MutableConstant:
+  Enabled: false
+
+Style/OneClassPerFile:
   Enabled: false
 
 Style/PreferredHashMethods:

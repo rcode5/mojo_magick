@@ -12,6 +12,7 @@ module MojoMagick
         fonts = {}
         enumerator = raw_fonts.split("\n").each
         name = nil
+        # rubocop:disable Lint/LiteralAssignmentInCondition
         while begin; line = enumerator.next; rescue StopIteration; line = nil; end
           line.chomp!
           line = enumerator.next if line_is_empty(line)
@@ -24,6 +25,7 @@ module MojoMagick
             fonts[name][k] = v if k && name
           end
         end
+        # rubocop:enable Lint/LiteralAssignmentInCondition
         fonts.values.map { |f| MojoMagick::Font.new f }
       end
 
