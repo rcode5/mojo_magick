@@ -10,6 +10,8 @@ post_install_message = <<~EOPOST_INSTALL
   If you plan to build images with text (using the "label" method) you'll need freetype and ghostscript as well.
   Check out http://www.freetype.org and http://ghostscript.com respectively for installation info.
 
+  NOTE: ImageMagick V6.x support has been dropped.  Please upgrade to ImageMagick V7
+
 EOPOST_INSTALL
 
 Gem::Specification.new do |s|
@@ -22,7 +24,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/rcode5/mojo_magick"
   s.summary     = "mojo_magick-#{MojoMagick::VERSION}"
   s.description = "Simple Ruby stateless module interface to imagemagick."
-  s.required_ruby_version = ">= 2.6.0"
+  s.required_ruby_version = ">= 3.4.8"
 
   s.rubyforge_project = "mojo_magick"
 

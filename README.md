@@ -212,6 +212,18 @@ in the new code
 Recent Changes
 ==============
 
+#### Version 1.0.0
+
+* bundle update
+* drop ImageMagick V6 support
+* ImageMagick V7 required 
+* Removed deprecated methods
+    * `MojoMagick#execute!`
+    * `MojoMagick#execute`
+    * `MojoMagick#raw_command`
+    * `MojoMagick#get_fonts`
+    * These Methods are still available via `MojoMagick::Commands` but that is not the preferred API.
+
 #### Version 0.6.7
 
 * Bundle update

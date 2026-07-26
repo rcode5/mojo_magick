@@ -4,4 +4,6 @@ module MojoMagick
   class MojoError < MojoMagickException; end
 
   class MojoFailed < MojoMagickException; end
+
+  class SourceFileRequired < MojoError; end
 end
