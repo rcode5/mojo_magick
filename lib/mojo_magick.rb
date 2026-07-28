@@ -118,7 +118,7 @@ module MojoMagick
     opts = OptBuilder.new
     yield opts
     opts.file dest if dest
-    Commands.raw_command("mogrify", *opts.to_a)
+    Commands.raw_command("magick", "mogrify", *opts.to_a)
   end
 
   def self.available_fonts
@@ -127,7 +127,7 @@ module MojoMagick
   end
 
   def self.get_format(source_file, format_string)
-    Commands.raw_command("identify", "-format", format_string, source_file)
+    Commands.raw_command("magick", "identify", "-format", format_string, source_file)
   end
 
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})

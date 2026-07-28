@@ -18,13 +18,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Setup ImageMagick identify
-        uses: AnimMouse/setup-appimage@v2
-        with:
-          filename: identify
-          url: https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-29/ImageMagick-7.1.2-29-gcc-x86_64.AppImage
-          cache_key: v1
-      - run: identify -version
       - name: Setup ImageMagick magick
         uses: AnimMouse/setup-appimage@v2
         with:
