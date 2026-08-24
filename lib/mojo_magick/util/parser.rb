@@ -1,4 +1,4 @@
-require_relative "./font_parser"
+require_relative "font_parser"
 module MojoMagick
   module Util
     class Parser

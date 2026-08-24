@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class MojoMagickOptBuilderTest < MiniTest::Test
+class MojoMagickOptBuilderTest < Minitest::Test
   # These tests make the assumption that if we call #raw_command with the
   # correct strings, ImageMagick itself will operate correctly. We're only
   # verifying that the option builder produces the correct strings

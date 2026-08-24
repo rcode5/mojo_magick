@@ -2,8 +2,8 @@ require_relative "opt_builder"
 
 module MojoMagick
   class Commands
-    def self.raw_command(*args)
-      execute!(*args)
+    def self.raw_command(*)
+      execute!(*)
     end
 
     class << self
@@ -17,8 +17,8 @@ module MojoMagick
         raise MojoError, "#{e.class}: #{e.message}"
       end
 
-      def execute!(command, *args)
-        status = execute(command, *args)
+      def execute!(command, *)
+        status = execute(command, *)
         unless status.success?
           err_msg = "MojoMagick command failed: #{command}."
           raise(MojoFailed, "#{err_msg} (Exit status: #{status.exit_code})\n  " \

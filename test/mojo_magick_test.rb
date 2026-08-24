@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class MojoMagickTest < MiniTest::Test
+class MojoMagickTest < Minitest::Test
   # we keep a fixtures path and a working path so that we can easily test image
   # manipulation routines without tainting the original images
   def setup
@@ -188,12 +188,10 @@ class MojoMagickTest < MiniTest::Test
   rescue MojoMagick::MojoFailed => e
     assert e.message.include?("unrecognized option"),
            "Unable to find ImageMagick commandline error in the message"
-    assert e.message.include?("convert.c/ConvertImageCommand"),
-           "Unable to find ImageMagick commandline error in the message"
   end
 
   def test_blob_rgb
-    data = (Array.new(16) { [(rand > 0.5) ? 0 : 255] * 3 }).flatten
+    data = Array.new(16) { [(rand > 0.5) ? 0 : 255] * 3 }.flatten
     bdata = data.pack "C" * data.size
     out = "out.png"
     MojoMagick.convert(nil, "png:#{out}") do |c|

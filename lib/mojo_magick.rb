@@ -1,12 +1,12 @@
 require "tempfile"
 require "open3"
-require_relative "./mojo_magick/util/font_parser"
-require_relative "./mojo_magick/errors"
-require_relative "./mojo_magick/command_status"
-require_relative "./mojo_magick/commands"
-require_relative "./image_magick/fonts"
-require_relative "./mojo_magick/opt_builder"
-require_relative "./mojo_magick/font"
+require_relative "mojo_magick/util/font_parser"
+require_relative "mojo_magick/errors"
+require_relative "mojo_magick/command_status"
+require_relative "mojo_magick/commands"
+require_relative "image_magick/fonts"
+require_relative "mojo_magick/opt_builder"
+require_relative "mojo_magick/font"
 
 # MojoMagick is a stateless set of module methods which present a convient interface
 # for accessing common tasks for ImageMagick command line library.
@@ -60,36 +60,11 @@ require_relative "./mojo_magick/font"
 #
 
 module MojoMagickDeprecations
-  # rubocop:disable Naming/AccessorMethodName
-  def get_fonts
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
-         "Please use `available_fonts` instead"
-    MojoMagick.available_fonts
-  end
-
-  # rubocop:enable Naming/AccessorMethodName
-  ### Moved to `Commands`
-  def execute!(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
-         "Please use `MojoMagick::Commands.execute!` instead"
-    MojoMagick::Commands.send(:execute!, *args)
-  end
-
-  def execute(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
-         "Please use `MojoMagick::Commands.execute!` instead"
-    MojoMagick::Commands.send(:execute, *args)
-  end
-
-  def raw_command(*args)
-    warn "DEPRECATION WARNING: #{__method__} is deprecated and will be removed with the next minor version release.  " \
-         "Please use `MojoMagick::Commands.execute!` instead"
-    MojoMagick::Commands.raw_command(*args)
-  end
 end
 
 module MojoMagick
   extend MojoMagickDeprecations
+
   def self.windows?
     !RUBY_PLATFORM.include(win32)
   end
@@ -122,7 +97,7 @@ module MojoMagick
       extras << "-extent"
       extras << geometry.to_s
     end
-    Commands.raw_command("convert",
+    Commands.raw_command("magick",
                          source_file,
                          "-resize", "#{geometry}#{scale_options}",
                          *extras, dest_file)
@@ -131,18 +106,19 @@ module MojoMagick
 
   def self.convert(source = nil, dest = nil)
     opts = OptBuilder.new
+    opts << "convert" unless source
     opts.file source if source
     yield opts
     opts.file dest if dest
 
-    Commands.raw_command("convert", *opts.to_a)
+    Commands.raw_command("magick", *opts.to_a)
   end
 
   def self.mogrify(dest = nil)
     opts = OptBuilder.new
     yield opts
     opts.file dest if dest
-    Commands.raw_command("mogrify", *opts.to_a)
+    Commands.raw_command("magick", "mogrify", *opts.to_a)
   end
 
   def self.available_fonts
@@ -151,7 +127,7 @@ module MojoMagick
   end
 
   def self.get_format(source_file, format_string)
-    Commands.raw_command("identify", "-format", format_string, source_file)
+    Commands.raw_command("magick", "identify", "-format", format_string, source_file)
   end
 
   # returns an empty hash or a hash with :width and :height set (e.g. {:width => INT, :height => INT})

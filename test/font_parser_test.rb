@@ -19,7 +19,7 @@ IDENTIFY_FONT_RESPONSE = <<~EOFONT
 
 EOFONT
 
-class FontParserTest < MiniTest::Test
+class FontParserTest < Minitest::Test
   def test_parse_fonts
     parser = MojoMagick::Util::FontParser.new(IDENTIFY_FONT_RESPONSE)
     parsed_fonts = parser.parse

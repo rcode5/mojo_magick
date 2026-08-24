@@ -13,11 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
       - name: Ruby setup
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Setup ImageMagick magick
+        uses: AnimMouse/setup-appimage@v2
+        with:
+          filename: magick
+          url: https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-29/ImageMagick-7.1.2-29-gcc-x86_64.AppImage
+          cache_key: v1
+      - run: magick -version
       - name: Lint
         run: bundle exec rubocop
       - name: Test
